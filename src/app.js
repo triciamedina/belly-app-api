@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV, CLIENT_ORIGIN } = require('./config');
+const userRouter = require('./user/user-router');
 
 const app = express();
 
@@ -16,6 +17,8 @@ app.use(helmet());
 app.use(cors({
     origin: CLIENT_ORIGIN
 }));
+
+app.use('/api/user', userRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, world!');
