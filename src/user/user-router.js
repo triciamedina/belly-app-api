@@ -10,9 +10,9 @@ userRouter
     .route('/')
     .all(bodyParser)
     .post((req, res, next) => {
-        const { username, password } = req.body;
+        const { username, password, avatar } = req.body;
 
-        for (const field of ['username', 'password']) {
+        for (const field of ['username', 'password', 'avatar']) {
             if (!req.body[field]) {
                 return res
                     .status(400)
@@ -49,7 +49,8 @@ userRouter
                     .then(hashedPassword => {
                         const newUser = {
                             username,
-                            password: hashedPassword
+                            password: hashedPassword,
+                            avatar
                         };
                         
                         return UserService.insertUser(
