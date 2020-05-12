@@ -38,6 +38,7 @@ const UserService = {
         return {
             id: user.id,
             username: xss(user.username),
+            avatar: xss(user.avatar),
             created_at: new Date(user.created_at),
         }
     },

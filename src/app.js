@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const cors = require('cors');
 const helmet = require('helmet');
 const { NODE_ENV, CLIENT_ORIGIN } = require('./config');
+const authRouter = require('./auth/auth-router');
 const userRouter = require('./user/user-router');
 
 const app = express();
@@ -18,6 +19,7 @@ app.use(cors({
     origin: CLIENT_ORIGIN
 }));
 
+app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
 
 app.get('/', (req, res) => {
