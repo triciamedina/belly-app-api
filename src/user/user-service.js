@@ -19,7 +19,7 @@ const UserService = {
         return null
     },
     hasUserWithUsername(db, username) {
-        return db('belly_users')
+        return db('belly_user')
             .where({ username })
             .first()
             .then(user => !!user)
@@ -30,7 +30,7 @@ const UserService = {
     insertUser(db, newUser) {
         return db
             .insert(newUser)
-            .into('belly_users')
+            .into('belly_user')
             .returning('*')
             .then(([user]) => user)
     },
