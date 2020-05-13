@@ -42,6 +42,13 @@ const UserService = {
             created_at: new Date(user.created_at),
         }
     },
+    // getUser(db, id) {
+    //     return db
+    //         .from('belly_user')
+    //         .select('*')
+    //         .where({ id })
+    //         .then(([user]) => user)
+    // },
 }
 
 module.exports = UserService;
