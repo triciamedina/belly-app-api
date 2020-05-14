@@ -37,7 +37,6 @@ billRouter
 
         // if owned
         if (type === 'owned') {
-            // find bills where bill user id matches user id
             BillService.getOwnedBills(
                 req.app.get('db'),
                 id
@@ -51,8 +50,6 @@ billRouter
             
         // if shared
         if (type === 'shared') {
-            // find user_bill where user id matches user id
-            // get bill info for each
             BillService.getSharedBills(
                 req.app.get('db'),
                 id
