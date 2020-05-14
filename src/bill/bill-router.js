@@ -28,41 +28,85 @@ const requireType = (req, res, next) => {
 }
 
 billRouter
-    .route(['/', '/:type'])
-    .all(bodyParser)
+    .route('/')
     .all(requireAuth)
-    .get(requireType, (req, res, next) => {
+    .post(bodyParser, (req, res, next) => {
+        // Posting new bill to bills owned by user
+    })
+
+billRouter
+    .route('/:type')
+    .all(requireAuth)
+    .all(requireType)
+    .get((req, res, next) => {
         const { type } = req.params;
         const { id } = req.user;
 
-        // if owned
+        // get bills owned by user
         if (type === 'owned') {
             BillService.getOwnedBills(
                 req.app.get('db'),
                 id
             )
                 .then(bills => {
-                    res
+                    return res
                         .status(200)
-                        .json({ ownedByMe: bills })
+                        .json({ ownedByMe: bills.map(BillService.serializeBill) })
                 })
+                .catch(next)
         }
             
-        // if shared
+        // get bills shared with user
         if (type === 'shared') {
             BillService.getSharedBills(
                 req.app.get('db'),
                 id
             )
                 .then(bills => {
-                    res
+                    return res
                         .status(200)
-                        .json({ sharedWithMe: bills })
+                        .json({ sharedWithMe: bills.map(BillService.serializeBill) })
                 })
+                .catch(next)
         }
-    })
-    .post((req, res, next) => {
-
     });
+
+billRouter
+    .route('/:type/:bill_id')
+    .all(requireAuth)
+    .all(requireType)
+    .get((req, res, next) => {
+        // Get details for existing bill
+
+        const { type, bill_id } = req.params;
+
+        BillService.hasBillWithId(
+            req.app.get('db'),
+            bill_id,
+        )
+            .then(hasBillWithId => {
+                if (!hasBillWithId) {
+                    return res
+                        .status(400)
+                        .json({ 
+                            error: `Bill with this id does not exist` 
+                        })
+                };
+
+                return BillService.getBillById(
+                    req.app.get('db'),
+                    bill_id
+                )
+                    .then(bill => {
+                        res
+                            .status(200)
+                            .json({ existingBill: BillService.serializeBillDetail(bill) })
+                    })
+                    .catch(next)
+            })
+    })
+    .post(bodyParser, (req, res, next) => {
+        // Edit details for existing bill
+    })
 
 module.exports = billRouter;

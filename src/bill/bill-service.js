@@ -18,7 +18,7 @@ const BillService = {
                 'belly_bill.fees',
                 db.raw(
                     `ARRAY(
-                       SELECT
+                        SELECT
                         JSON_BUILD_OBJECT(
                             'id', belly_item.id, 
                             'bill_id', belly_item.bill_id,
@@ -70,7 +70,7 @@ const BillService = {
                 'belly_bill.fees',
                 db.raw(
                     `ARRAY(
-                       SELECT
+                        SELECT
                         JSON_BUILD_OBJECT(
                             'id', belly_item.id, 
                             'bill_id', belly_item.bill_id,
@@ -99,12 +99,79 @@ const BillService = {
             )
             .then(bills => bills)
     },
-    getItems(db, bill_id) {
+    serializeBill(bill) {
+        return {
+            id: bill.id,
+            owner: bill.owner,
+            created_at: new Date(bill.created_at),
+            bill_name: xss(bill.bill_name),
+            bill_thumbnail: xss(bill.bill_thumbnail),
+            last_viewed: new Date(bill.last_viewed),
+            discounts: xss(bill.discounts),
+            tax: xss(bill.tax),
+            tip: xss(bill.tip),
+            fees: xss(bill.fees),
+            items: bill.items.map(BillService.serializeItem)
+        }
+    },
+    serializeItem(item) {
+        return {
+            id: item.id,
+            bill_id: item.bill_id,
+            item_name: xss(item.item_name),
+            quantity: item.quantity,
+            price: xss(item.price),
+            created_at: new Date(item.created_at),
+            split_list: item.split_list.map(BillService.serializeSplitter)
+        }
+    },
+    serializeSplitter(splitter) {
+        return {
+            id: splitter.id,
+            item_id: splitter.item_id,
+            nickname: xss(splitter.nickname),
+            share_qty: splitter.share_qty,
+            created_at: new Date(splitter.created_at)
+        }
+    },
+    hasBillWithId(db, id) {
+        return db('belly_bill')
+            .where({ id })
+            .first()
+            .then(bill => !!bill)
+    },
+    getBillById(db, id) {
         return db
-            .from('belly_item')
-            .select('*')
-            .where('bill_id', bill_id)
-            .then(items => items)
+            .from('belly_bill')
+            .where({ id })
+            .first()
+            .select(
+                'belly_bill.id',
+                'belly_bill.owner',
+                'belly_bill.created_at',
+                'belly_bill.bill_name',
+                'belly_bill.bill_thumbnail',
+                'belly_bill.last_viewed',
+                'belly_bill.discounts',
+                'belly_bill.tax',
+                'belly_bill.tip',
+                'belly_bill.fees'
+            )
+            .then(bill => bill)
+    },
+    serializeBillDetail(bill) {
+        return {
+            id: bill.id,
+            owner: bill.owner,
+            created_at: new Date(bill.created_at),
+            bill_name: xss(bill.bill_name),
+            bill_thumbnail: xss(bill.bill_thumbnail),
+            last_viewed: new Date(bill.last_viewed),
+            discounts: xss(bill.discounts),
+            tax: xss(bill.tax),
+            tip: xss(bill.tip),
+            fees: xss(bill.fees)
+        }
     }
 }
 
