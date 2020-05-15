@@ -116,7 +116,7 @@ billRouter
     .all(requireAuth)
     .all(requireType)
     .get((req, res, next) => {
-        // Get details for existing bill
+        // Get details for single bill
 
         const { type, bill_id } = req.params;
 
@@ -188,6 +188,19 @@ billRouter
             tip = undefined, 
             fees = undefined
         } = req.body;
+
+        if (
+                !req.body[billName] 
+                && !req.body[billThumbnail] 
+                && !req.body[discounts] 
+                && !req.body[tax]
+                && !req.body[tip]
+                && !req.body[fees]
+            ) {
+            return res.status(400).json({
+                error: `Request body must contain one of 'billName', 'billThumbnail', 'discounts', 'tax', 'tip', or 'fees'`
+            })
+        }
 
         const billToUpdate = {
             bill_name: billName,

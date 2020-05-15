@@ -71,5 +71,48 @@ itemRouter
                     .catch(next)
             })
     })
+    .patch(bodyParser, (req, res, next) => {
+        const { item_id } = req.params;
+
+        const { itemName = undefined, quantity = undefined, price = undefined } = req.body;
+
+        if (!req.body[itemName] && !req.body[quantity] && !req.body[price]) {
+            return res.status(400).json({
+                error: `Request body must contain one of 'itemName', 'price', or 'quantity'`
+            })
+        }
+     
+        const itemToUpdate = {
+            item_name: itemName,
+            quantity,
+            price
+        }
+
+        ItemService.hasItemWithId(
+            req.app.get('db'),
+            item_id
+        )
+            .then(hasItemwithId => {
+                if (!hasItemwithId) {
+                    return res
+                        .status(400)
+                        .json({
+                            error: `Item with this id does not exist`
+                        })
+                }
+
+                return ItemService.updateItem(
+                    req.app.get('db'),
+                    item_id,
+                    itemToUpdate
+                )
+                    .then(item => {
+                        res
+                            .status(200)
+                            .json(ItemService.serializeItemDetail(item))
+                    })
+                    .catch(next)
+            })
+    })
 
 module.exports = itemRouter;

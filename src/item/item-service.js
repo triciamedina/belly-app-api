@@ -41,6 +41,16 @@ const ItemService = {
             price: xss(item.price),
             created_at: new Date(item.created_at)
         }
+    },
+    updateItem(db, id, itemToUpdate) {
+        return db
+            .from('belly_item')
+            .where({ id })
+            .update(itemToUpdate, ['id'])
+            .then(([item]) => item)
+            .then(item =>
+                ItemService.getItemById(db, item.id)
+            )
     }
 };
 
