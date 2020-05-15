@@ -186,21 +186,6 @@ const BillService = {
             )
             .then(bill => bill)
     },
-    getItemById(db, id) {
-        return db
-            .from('belly_item')
-            .where({ id })
-            .first()
-            .select(
-                'belly_item.id',
-                'belly_item.bill_id',
-                'belly_item.item_name',
-                'belly_item.quantity',
-                'belly_item.price',
-                'belly_item.created_at'
-            )
-            .then(item => item)
-    },
     serializeBillDetail(bill) {
         return {
             id: bill.id,
@@ -214,16 +199,6 @@ const BillService = {
             fees: xss(bill.fees)
         }
     },
-    serializeItemDetail(item) {
-        return {
-            id: item.id,
-            bill_id: item.bill_id,
-            item_name: xss(item.item_name),
-            quantity: item.quantity,
-            price: xss(item.price),
-            created_at: new Date(item.created_at)
-        }
-    },
     insertBill(db, newBill) {
         return db
             .insert(newBill)
@@ -232,16 +207,6 @@ const BillService = {
             .then(([bill]) => bill)
             .then(bill =>
                 BillService.getBillById(db, bill.id)
-            )
-    },
-    insertItem(db, newItem) {
-        return db
-            .insert(newItem)
-            .into('belly_item')
-            .returning('*')
-            .then(([item]) => item)
-            .then(item =>
-                BillService.getItemById(db, item.id)
             )
     }
 }

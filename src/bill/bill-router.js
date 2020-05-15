@@ -180,40 +180,4 @@ billRouter
         // Edit details for existing bill
     });
 
-billRouter
-    .route('/:type/:bill_id/item')
-    .all(requireAuth)
-    .all(requireType)
-    .post(bodyParser, (req, res, next) => {
-        const { bill_id } = req.params;
-        const { itemName, quantity, price } = req.body;
-
-        for (const field of ['itemName', 'quantity', 'price']) {
-            if (req.body[field] == null) {
-                return res.status(400).json({
-                    error: `Missing '${field}' in request body`
-                })
-            }
-        };
-
-        const newItem = {
-            item_name: itemName,
-            bill_id,
-            quantity,
-            price
-        };
-
-        BillService.insertItem(
-            req.app.get('db'),
-            newItem
-        )
-            .then(item => {
-                return res
-                    .status(201)
-                    .location(path.posix.join(req.originalUrl, `/${item.id}`))
-                    .json(BillService.serializeItemDetail(item))
-            })
-            .catch(next)
-    })
-
 module.exports = billRouter;
