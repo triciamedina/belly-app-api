@@ -176,8 +176,86 @@ billRouter
                 })
         }
     })
-    .post(bodyParser, (req, res, next) => {
+    .patch(bodyParser, (req, res, next) => {
         // Edit details for existing bill
+        const { type, bill_id } = req.params;
+
+        const { 
+            billName = undefined, 
+            billThumbnail = undefined, 
+            discounts = undefined, 
+            tax = undefined, 
+            tip = undefined, 
+            fees = undefined
+        } = req.body;
+
+        const billToUpdate = {
+            bill_name: billName,
+            bill_thumbnail: billThumbnail,
+            discounts: discounts,
+            tax,
+            tip,
+            fees
+        }
+
+        if (type === 'owned') {
+            BillService.hasOwnedBillWithId(
+                req.app.get('db'),
+                req.user.id,
+                bill_id,
+            )
+                .then(hasBillWithId => {
+                    if (!hasBillWithId) {
+                        return res
+                            .status(400)
+                            .json({ 
+                                error: `Bill with this id does not exist` 
+                            })
+                    };
+
+                    return BillService.updateBill(
+                        req.app.get('db'),
+                        bill_id,
+                        billToUpdate
+                    )
+                        .then(bill => {
+                            res
+                                .status(200)
+                                .json(BillService.serializeBillDetail(bill))
+                        })
+                        .catch(next)
+                })
+        }
+
+        if (type === 'shared') {
+            BillService.hasSharedBillWithId(
+                req.app.get('db'),
+                req.user.id,
+                bill_id,
+            )
+                .then(hasBillWithId => {
+                    if (!hasBillWithId) {
+                        return res
+                            .status(400)
+                            .json({ 
+                                error: `Bill with this id does not exist` 
+                            })
+                    };
+
+                    return BillService.updateBill(
+                        req.app.get('db'),
+                        bill_id,
+                        billToUpdate
+                    )
+                        .then(bill => {
+                            res
+                                .status(200)
+                                .json(BillService.serializeBillDetail(bill))
+                        })
+                        .catch(next)
+                })
+        }
+
     });
 
 module.exports = billRouter;

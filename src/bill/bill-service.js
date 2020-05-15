@@ -208,6 +208,16 @@ const BillService = {
             .then(bill =>
                 BillService.getBillById(db, bill.id)
             )
+    },
+    updateBill(db, id, billToUpdate) {
+        return db
+            .from('belly_bill')
+            .where({ id })
+            .update(billToUpdate, ['id'])
+            .then(([bill]) => bill)
+            .then(bill =>
+                BillService.getBillById(db, bill.id)
+            )
     }
 }
 
