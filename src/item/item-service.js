@@ -1,6 +1,12 @@
 const xss = require('xss');
 
-const ItemService = { 
+const ItemService = {
+    hasItemWithId(db, id) {
+        return db('belly_item')
+            .where({ id })
+            .first()
+            .then(item => !!item)
+    },
     getItemById(db, id) {
         return db
             .from('belly_item')

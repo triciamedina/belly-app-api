@@ -40,4 +40,36 @@ itemRouter
             .catch(next)
     })
 
+itemRouter
+    .route('/:item_id')
+    .all(requireAuth)
+    .get((req, res, next) => {
+        const { item_id } = req.params;
+
+        ItemService.hasItemWithId(
+            req.app.get('db'),
+            item_id
+        )
+            .then(hasItemWithId => {
+                if (!hasItemWithId) {
+                    return res
+                        .status(400)
+                        .json({ 
+                            error: `Item with this id does not exist` 
+                        })
+                };
+
+                return ItemService.getItemById(
+                    req.app.get('db'),
+                    item_id
+                )
+                    .then(item => {
+                        res
+                            .status(200)
+                            .json(ItemService.serializeItemDetail(item))
+                    })
+                    .catch(next)
+            })
+    })
+
 module.exports = itemRouter;
