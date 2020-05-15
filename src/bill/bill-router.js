@@ -32,6 +32,46 @@ billRouter
     .all(requireAuth)
     .post(bodyParser, (req, res, next) => {
         // Posting new bill to bills owned by user
+        
+        const { id } = req.user;
+        const { 
+            billName, 
+            billThumbnail, 
+            discounts, 
+            tax, 
+            tip, 
+            fees 
+        } = req.body;
+
+        for (const field of ['billName', 'billThumbnail', 'discounts', 'tax', 'tip', 'fees']) {
+            if (req.body[field] == null) {
+                return res.status(400).json({
+                    error: `Missing '${field}' in request body`
+                })
+            }
+        };
+        
+        const newBill = {
+            owner: id,
+            bill_name: billName,
+            bill_thumbnail: billThumbnail,
+            discounts,
+            tax,
+            tip,
+            fees
+        }
+
+        BillService.insertBill(
+            req.app.get('db'),
+            newBill
+        )
+            .then(bill => {
+                return res
+                    .status(201)
+                    .location(path.posix.join(req.originalUrl, `/${bill.id}`))
+                    .json(BillService.serializeBillDetail(bill))
+            })
+            .catch(next)
     })
 
 billRouter

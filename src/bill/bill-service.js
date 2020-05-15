@@ -198,6 +198,16 @@ const BillService = {
             tip: xss(bill.tip),
             fees: xss(bill.fees)
         }
+    },
+    insertBill(db, newBill) {
+        return db
+            .insert(newBill)
+            .into('belly_bill')
+            .returning('*')
+            .then(([bill]) => bill)
+            .then(bill =>
+                BillService.getBillById(db, bill.id)
+            )
     }
 }
 
