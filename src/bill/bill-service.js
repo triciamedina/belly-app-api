@@ -3,7 +3,7 @@ const xss = require('xss');
 const BillService = {  
     getOwnedBills(db, user_id) {
         return db
-            .from('belly_bill')
+            .from('belly_bill', 'belly_bill_views')
             .where('owner', user_id)
             .select(
                 'belly_bill.id',
@@ -11,11 +11,19 @@ const BillService = {
                 'belly_bill.created_at',
                 'belly_bill.bill_name',
                 'belly_bill.bill_thumbnail',
-                'belly_bill.last_viewed',
                 'belly_bill.discounts',
                 'belly_bill.tax',
                 'belly_bill.tip',
                 'belly_bill.fees',
+                db.raw(
+                    `(
+                        SELECT last_viewed
+                        FROM belly_bill_views
+                        WHERE belly_bill_views.bill_id = belly_bill.id
+                        ORDER BY last_viewed DESC
+                        LIMIT 1
+                    )`
+                ),
                 db.raw(
                     `ARRAY(
                         SELECT
@@ -49,7 +57,7 @@ const BillService = {
     },
     getSharedBills(db, user_id) {
         return db
-            .from('belly_user_bill')
+            .from('belly_user_bill', 'belly_bill_views')
             .where('user_id', user_id)
             .join(
                 'belly_bill',
@@ -63,11 +71,19 @@ const BillService = {
                 'belly_bill.created_at',
                 'belly_bill.bill_name',
                 'belly_bill.bill_thumbnail',
-                'belly_bill.last_viewed',
                 'belly_bill.discounts',
                 'belly_bill.tax',
                 'belly_bill.tip',
                 'belly_bill.fees',
+                db.raw(
+                    `(
+                        SELECT last_viewed
+                        FROM belly_bill_views
+                        WHERE belly_bill_views.bill_id = belly_bill.id
+                        ORDER BY last_viewed DESC
+                        LIMIT 1
+                    )`
+                ),
                 db.raw(
                     `ARRAY(
                         SELECT
@@ -134,9 +150,21 @@ const BillService = {
             created_at: new Date(splitter.created_at)
         }
     },
-    hasBillWithId(db, id) {
+    hasOwnedBillWithId(db, user_id, bill_id) {
         return db('belly_bill')
-            .where({ id })
+            .where({
+                owner: user_id,
+                id: bill_id
+            })
+            .first()
+            .then(bill => !!bill)
+    },
+    hasSharedBillWithId(db, user_id, bill_id) {
+        return db('belly_user_bill')
+            .where({ 
+                user_id,
+                bill_id
+            })
             .first()
             .then(bill => !!bill)
     },
@@ -151,7 +179,6 @@ const BillService = {
                 'belly_bill.created_at',
                 'belly_bill.bill_name',
                 'belly_bill.bill_thumbnail',
-                'belly_bill.last_viewed',
                 'belly_bill.discounts',
                 'belly_bill.tax',
                 'belly_bill.tip',
@@ -166,7 +193,6 @@ const BillService = {
             created_at: new Date(bill.created_at),
             bill_name: xss(bill.bill_name),
             bill_thumbnail: xss(bill.bill_thumbnail),
-            last_viewed: new Date(bill.last_viewed),
             discounts: xss(bill.discounts),
             tax: xss(bill.tax),
             tip: xss(bill.tip),

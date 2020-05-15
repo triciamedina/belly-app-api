@@ -1,10 +1,10 @@
 const express = require('express');
 const path = require('path');
 const  { requireAuth } = require('../middleware/jwt-auth');
+const BillService = require('../bill/bill-service');
 
 const billRouter = express.Router();
 const bodyParser = express.json();
-const BillService = require('../bill/bill-service');
 
 const requireType = (req, res, next) => {
     const { type } = req.params;
@@ -80,30 +80,61 @@ billRouter
 
         const { type, bill_id } = req.params;
 
-        BillService.hasBillWithId(
-            req.app.get('db'),
-            bill_id,
-        )
-            .then(hasBillWithId => {
-                if (!hasBillWithId) {
-                    return res
-                        .status(400)
-                        .json({ 
-                            error: `Bill with this id does not exist` 
-                        })
-                };
+        if (type === 'owned') {
+            BillService.hasOwnedBillWithId(
+                req.app.get('db'),
+                req.user.id,
+                bill_id,
+            )
+                .then(hasBillWithId => {
+                    if (!hasBillWithId) {
+                        return res
+                            .status(400)
+                            .json({ 
+                                error: `Bill with this id does not exist` 
+                            })
+                    };
 
-                return BillService.getBillById(
-                    req.app.get('db'),
-                    bill_id
-                )
-                    .then(bill => {
-                        res
-                            .status(200)
-                            .json({ existingBill: BillService.serializeBillDetail(bill) })
-                    })
-                    .catch(next)
-            })
+                    return BillService.getBillById(
+                        req.app.get('db'),
+                        bill_id
+                    )
+                        .then(bill => {
+                            res
+                                .status(200)
+                                .json({ existingBill: BillService.serializeBillDetail(bill) })
+                        })
+                        .catch(next)
+                })
+        }
+
+        if (type === 'shared') {
+            BillService.hasSharedBillWithId(
+                req.app.get('db'),
+                req.user.id,
+                bill_id,
+            )
+                .then(hasBillWithId => {
+                    if (!hasBillWithId) {
+                        return res
+                            .status(400)
+                            .json({ 
+                                error: `Bill with this id does not exist` 
+                            })
+                    };
+
+                    return BillService.getBillById(
+                        req.app.get('db'),
+                        bill_id
+                    )
+                        .then(bill => {
+                            res
+                                .status(200)
+                                .json({ existingBill: BillService.serializeBillDetail(bill) })
+                        })
+                        .catch(next)
+                })
+        }
     })
     .post(bodyParser, (req, res, next) => {
         // Edit details for existing bill
