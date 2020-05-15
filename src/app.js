@@ -6,6 +6,8 @@ const helmet = require('helmet');
 const { NODE_ENV, CLIENT_ORIGIN } = require('./config');
 const authRouter = require('./auth/auth-router');
 const userRouter = require('./user/user-router');
+const billRouter = require('./bill/bill-router');
+const itemRouter = require('./item/item-router');
 
 const app = express();
 
@@ -21,6 +23,8 @@ app.use(cors({
 
 app.use('/api/auth', authRouter);
 app.use('/api/user', userRouter);
+app.use('/api/bill', billRouter);
+app.use('/api/item', itemRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, world!');

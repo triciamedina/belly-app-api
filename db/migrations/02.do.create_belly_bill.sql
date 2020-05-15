@@ -4,7 +4,6 @@ CREATE TABLE belly_bill (
     created_at TIMESTAMP DEFAULT now() NOT NULL,
     bill_name TEXT NOT NULL,
     bill_thumbnail TEXT NOT NULL,
-    last_viewed TIMESTAMP,
     discounts NUMERIC (8, 2) NOT NULL,
     tax NUMERIC (8, 2) NOT NULL,
     tip NUMERIC (8, 2) NOT NULL,
