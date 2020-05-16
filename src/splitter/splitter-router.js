@@ -41,8 +41,58 @@ splitterRouter
             })
             .catch(next)
     })
+
+splitterRouter
+    .route('/:splitter_id')
+    .all(requireAuth)
+    .all(bodyParser)
     .patch((req, res, next) => {
         // update splitter
+        const { splitter_id } = req.params;
+
+        const { 
+            nickname = undefined,
+            avatar = undefined,
+            share_qty = undefined
+        } = req.body;
+
+        if (!req.body.nickname && !req.body.avatar && !req.body.share_qty) {
+            return res.status(400).json({
+                error: `Request body must contain one of 'nickname', 'avatar, or 'share_qty'`
+            })
+        }
+     
+        const splitterToUpdate = {
+            nickname,
+            avatar,
+            share_qty
+        };
+
+        SplitterService.hasSplitterWithId(
+            req.app.get('db'),
+            splitter_id
+        )
+            .then(hasSplitterWithId => {
+                if (!hasSplitterWithId) {
+                    return res
+                        .status(400)
+                        .json({
+                            error: `Splitter with this id does not exist`
+                        })
+                }
+
+                return SplitterService.updateSplitter(
+                    req.app.get('db'),
+                    splitter_id,
+                    splitterToUpdate
+                )
+                    .then(splitter => {
+                        res
+                            .status(200)
+                            .json(SplitterService.serializeSplitter(splitter))
+                    })
+                    .catch(next)
+            })
     })
 
 module.exports = splitterRouter;

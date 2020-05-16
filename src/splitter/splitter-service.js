@@ -1,6 +1,12 @@
 const xss = require('xss');
 
 const SplitterService = {
+    hasSplitterWithId(db, id) {
+        return db('belly_splitter')
+            .where({ id })
+            .first()
+            .then(splitter => !!splitter)
+    },
     getSplitterById(db, id) {
         return db
             .from('belly_splitter')
@@ -21,6 +27,16 @@ const SplitterService = {
             .insert(newSplitter)
             .into('belly_splitter')
             .returning('*')
+            .then(([splitter]) => splitter)
+            .then(splitter =>
+                SplitterService.getSplitterById(db, splitter.id)
+            )
+    },
+    updateSplitter(db, id, splitterToUpdate) {
+        return db
+            .from('belly_splitter')
+            .where({ id })
+            .update(splitterToUpdate, ['id'])
             .then(([splitter]) => splitter)
             .then(splitter =>
                 SplitterService.getSplitterById(db, splitter.id)

@@ -92,8 +92,8 @@ itemRouter
             req.app.get('db'),
             item_id
         )
-            .then(hasItemwithId => {
-                if (!hasItemwithId) {
+            .then(hasItemWithId => {
+                if (!hasItemWithId) {
                     return res
                         .status(400)
                         .json({
