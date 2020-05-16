@@ -9,6 +9,7 @@ const userRouter = require('./user/user-router');
 const billRouter = require('./bill/bill-router');
 const itemRouter = require('./item/item-router');
 const splitterRouter = require('./splitter/splitter-router');
+const viewRouter = require('./view/view-router');
 
 const app = express();
 
@@ -27,6 +28,7 @@ app.use('/api/user', userRouter);
 app.use('/api/bill', billRouter);
 app.use('/api/item', itemRouter);
 app.use('/api/splitter', splitterRouter);
+app.use('/api/view', viewRouter);
 
 app.get('/', (req, res) => {
     res.send('Hello, world!');
