@@ -26,7 +26,7 @@ authRouter
                         return res
                             .status(400)
                             .json({
-                                error: `Incorrect email or password`
+                                error: `Incorrect username or password`
                             })
                     };
 
@@ -36,7 +36,7 @@ authRouter
                                 return res
                                     .status(400)
                                     .json({
-                                        error: `Incorrect email or password`
+                                        error: `Incorrect username or password`
                                     })
                             };
 

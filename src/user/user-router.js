@@ -1,15 +1,28 @@
 const express = require('express');
 const path = require('path');
-const moment = require('moment');
 const UserService = require('./user-service');
+const  { requireAuth } = require('../middleware/jwt-auth');
 
 const userRouter = express.Router();
 const bodyParser = express.json();
 
 userRouter
     .route('/')
-    .all(bodyParser)
-    .post((req, res, next) => {
+    .get(requireAuth, (req, res, next) => {
+        const { id } = req.user;
+
+        UserService.getUser(
+            req.app.get('db'),
+            id
+        )
+            .then(user => {
+                res
+                    .status(200)
+                    .json(UserService.serializeUser(user))
+        })
+        .catch(next)
+    })
+    .post(bodyParser, (req, res, next) => {
         const { username, password, avatar } = req.body;
 
         for (const field of ['username', 'password', 'avatar']) {
