@@ -186,19 +186,21 @@ billRouter
             discounts = undefined, 
             tax = undefined, 
             tip = undefined, 
-            fees = undefined
+            fees = undefined,
+            deleted = null
         } = req.body;
 
         if (
-                !req.body[billName] 
-                && !req.body[billThumbnail] 
-                && !req.body[discounts] 
-                && !req.body[tax]
-                && !req.body[tip]
-                && !req.body[fees]
+                !req.body.billName
+                && !req.body.billThumbnail
+                && !req.body.discounts
+                && !req.body.tax
+                && !req.body.tip
+                && !req.body.fees
+                && !req.body.deleted
             ) {
             return res.status(400).json({
-                error: `Request body must contain one of 'billName', 'billThumbnail', 'discounts', 'tax', 'tip', or 'fees'`
+                error: `Request body must contain one of 'billName', 'billThumbnail', 'discounts', 'tax', 'tip', 'fees', or 'deleted'`
             })
         }
 
@@ -208,7 +210,8 @@ billRouter
             discounts: discounts,
             tax,
             tip,
-            fees
+            fees,
+            deleted
         }
 
         if (type === 'owned') {

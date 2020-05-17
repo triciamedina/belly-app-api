@@ -7,5 +7,6 @@ CREATE TABLE belly_bill (
     discounts NUMERIC (8, 2) NOT NULL,
     tax NUMERIC (8, 2) NOT NULL,
     tip NUMERIC (8, 2) NOT NULL,
-    fees NUMERIC (8, 2) NOT NULL
+    fees NUMERIC (8, 2) NOT NULL,
+    deleted TIMESTAMP
 );

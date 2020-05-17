@@ -4,7 +4,10 @@ const BillService = {
     getOwnedBills(db, user_id) {
         return db
             .from('belly_bill', 'belly_bill_views')
-            .where('owner', user_id)
+            .where({
+                owner: user_id,
+                deleted: null
+            })
             .select(
                 'belly_bill.id',
                 'belly_bill.owner',
@@ -46,6 +49,7 @@ const BillService = {
                                 )
                                 FROM belly_splitter
                                 WHERE belly_splitter.item_id = belly_item.id
+                                AND belly_splitter.deleted is null
                             )
                         )
                         FROM belly_item
@@ -58,13 +62,20 @@ const BillService = {
     getSharedBills(db, user_id) {
         return db
             .from('belly_user_bill', 'belly_bill_views')
-            .where('user_id', user_id)
+            .where({
+                user_id: user_id,
+                deleted: null
+            })
             .join(
                 'belly_bill',
                 'belly_user_bill.bill_id',
                 '=',
                 'belly_bill.id'
             )
+            // .join('belly_bill', function () {
+            //     this
+            //       .on('belly_user_bill.bill_id', 'belly_bill.id')
+            // })
             .select(
                 'belly_bill.id',
                 'belly_bill.owner',
@@ -106,6 +117,7 @@ const BillService = {
                                 )
                                 FROM belly_splitter
                                 WHERE belly_splitter.item_id = belly_item.id
+                                AND belly_splitter.deleted is null
                             )
                         )
                         FROM belly_item

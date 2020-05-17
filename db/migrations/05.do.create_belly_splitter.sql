@@ -4,5 +4,6 @@ CREATE TABLE belly_splitter (
     nickname TEXT NOT NULL,
     avatar TEXT NOT NULL,
     share_qty INTEGER NOT NULL,
-    created_at TIMESTAMP DEFAULT now() NOT NULL
+    created_at TIMESTAMP DEFAULT now() NOT NULL,
+    deleted TIMESTAMP
 );

@@ -53,19 +53,21 @@ splitterRouter
         const { 
             nickname = undefined,
             avatar = undefined,
-            share_qty = undefined
+            share_qty = undefined,
+            deleted = null
         } = req.body;
 
-        if (!req.body.nickname && !req.body.avatar && !req.body.share_qty) {
+        if (!req.body.nickname && !req.body.avatar && !req.body.share_qty && !req.body.deleted) {
             return res.status(400).json({
-                error: `Request body must contain one of 'nickname', 'avatar, or 'share_qty'`
+                error: `Request body must contain one of 'nickname', 'avatar, 'share_qty', or 'deleted'`
             })
         }
      
         const splitterToUpdate = {
             nickname,
             avatar,
-            share_qty
+            share_qty,
+            deleted
         };
 
         SplitterService.hasSplitterWithId(
@@ -87,6 +89,7 @@ splitterRouter
                     splitterToUpdate
                 )
                     .then(splitter => {
+                        console.log(splitter)
                         res
                             .status(200)
                             .json(SplitterService.serializeSplitter(splitter))
