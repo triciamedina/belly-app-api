@@ -158,6 +158,7 @@ const BillService = {
             id: splitter.id,
             item_id: splitter.item_id,
             nickname: xss(splitter.nickname),
+            avatar: xss(splitter.avatar),
             share_qty: splitter.share_qty,
             created_at: new Date(splitter.created_at)
         }
