@@ -46,15 +46,17 @@ const BillService = {
                                 SELECT
                                 JSON_BUILD_OBJECT(
                                     'id', belly_splitter.id,
-                                    'item_id', belly_splitter.item_id,
+                                    'item_id', belly_item_splitter.item_id,
                                     'nickname', belly_splitter.nickname,
                                     'avatar', belly_splitter.avatar,
-                                    'share_qty', belly_splitter.share_qty,
-                                    'created_at', belly_splitter.created_at
+                                    'share_qty', belly_item_splitter.share_qty,
+                                    'created_at', belly_item_splitter.created_at
                                 )
                                 FROM belly_splitter
-                                WHERE belly_splitter.item_id = belly_item.id
-                                AND belly_splitter.deleted is null
+                                JOIN belly_item_splitter
+                                ON belly_splitter.id = belly_item_splitter.splitter_id
+                                WHERE belly_item_splitter.item_id = belly_item.id
+                                AND belly_item_splitter.deleted is null
                             )
                         )
                         FROM belly_item
@@ -113,15 +115,17 @@ const BillService = {
                                 SELECT
                                 JSON_BUILD_OBJECT(
                                     'id', belly_splitter.id,
-                                    'item_id', belly_splitter.item_id,
+                                    'item_id', belly_item_splitter.item_id,
                                     'nickname', belly_splitter.nickname,
                                     'avatar', belly_splitter.avatar,
-                                    'share_qty', belly_splitter.share_qty,
-                                    'created_at', belly_splitter.created_at
+                                    'share_qty', belly_item_splitter.share_qty,
+                                    'created_at', belly_item_splitter.created_at
                                 )
                                 FROM belly_splitter
-                                WHERE belly_splitter.item_id = belly_item.id
-                                AND belly_splitter.deleted is null
+                                JOIN belly_item_splitter
+                                ON belly_splitter.id = belly_item_splitter.splitter_id
+                                WHERE belly_item_splitter.item_id = belly_item.id
+                                AND belly_item_splitter.deleted is null
                             )
                         )
                         FROM belly_item
