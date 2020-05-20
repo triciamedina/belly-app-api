@@ -74,9 +74,9 @@ itemRouter
     .patch(bodyParser, (req, res, next) => {
         const { item_id } = req.params;
 
-        const { itemName = undefined, quantity = undefined, price = undefined } = req.body;
+        const { itemName = undefined, quantity = undefined, price = undefined, deleted = null } = req.body;
 
-        if (!req.body[itemName] && !req.body[quantity] && !req.body[price]) {
+        if (!req.body.itemName && !req.body.quantity && !req.body.price & !req.body.deleted) {
             return res.status(400).json({
                 error: `Request body must contain one of 'itemName', 'price', or 'quantity'`
             })
@@ -85,7 +85,8 @@ itemRouter
         const itemToUpdate = {
             item_name: itemName,
             quantity,
-            price
+            price,
+            deleted
         }
 
         ItemService.hasItemWithId(

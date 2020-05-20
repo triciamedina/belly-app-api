@@ -1,7 +1,11 @@
 const xss = require('xss');
+const defaultOptions = {
+    wasLastViewByMe: true 
+};
 
-const BillService = {  
-    getOwnedBills(db, user_id) {
+const BillService = { 
+    getOwnedBills(db, user_id, options = defaultOptions) {
+        const { wasLastViewByMe } = options;
         return db
             .from('belly_bill', 'belly_bill_views')
             .where({
@@ -23,6 +27,7 @@ const BillService = {
                         SELECT last_viewed
                         FROM belly_bill_views
                         WHERE belly_bill_views.bill_id = belly_bill.id
+                        ${wasLastViewByMe ? `AND belly_bill_views.user_id = ${user_id}`: ''}
                         ORDER BY last_viewed DESC
                         LIMIT 1
                     )`
@@ -54,12 +59,14 @@ const BillService = {
                         )
                         FROM belly_item
                         WHERE belly_item.bill_id = belly_bill.id
+                        AND belly_item.deleted is null
                     ) AS "items"`
                 )
             )
             .then(bills => bills)
     },
-    getSharedBills(db, user_id) {
+    getSharedBills(db, user_id, options = defaultOptions) {
+        const { wasLastViewByMe } = options;
         return db
             .from('belly_user_bill', 'belly_bill_views')
             .where({
@@ -72,10 +79,6 @@ const BillService = {
                 '=',
                 'belly_bill.id'
             )
-            // .join('belly_bill', function () {
-            //     this
-            //       .on('belly_user_bill.bill_id', 'belly_bill.id')
-            // })
             .select(
                 'belly_bill.id',
                 'belly_bill.owner',
@@ -91,6 +94,7 @@ const BillService = {
                         SELECT last_viewed
                         FROM belly_bill_views
                         WHERE belly_bill_views.bill_id = belly_bill.id
+                        ${wasLastViewByMe ? `AND belly_bill_views.user_id = ${user_id}`: ''}
                         ORDER BY last_viewed DESC
                         LIMIT 1
                     )`
@@ -122,6 +126,7 @@ const BillService = {
                         )
                         FROM belly_item
                         WHERE belly_item.bill_id = belly_bill.id
+                        AND belly_item.deleted is null
                     ) AS "items"`
                 )
             )
@@ -134,7 +139,7 @@ const BillService = {
             created_at: new Date(bill.created_at),
             bill_name: xss(bill.bill_name),
             bill_thumbnail: xss(bill.bill_thumbnail),
-            last_viewed: new Date(bill.last_viewed),
+            last_viewed: bill.last_viewed ? new Date(bill.last_viewed) : bill.last_viewed,
             discounts: xss(bill.discounts),
             tax: xss(bill.tax),
             tip: xss(bill.tip),

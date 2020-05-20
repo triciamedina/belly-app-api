@@ -4,5 +4,6 @@ CREATE TABLE belly_item (
     item_name TEXT NOT NULL,
     quantity INTEGER NOT NULL,
     price NUMERIC (8, 2) NOT NULL,
-    created_at TIMESTAMP DEFAULT now() NOT NULL
+    created_at TIMESTAMP DEFAULT now() NOT NULL,
+    deleted TIMESTAMP
 );

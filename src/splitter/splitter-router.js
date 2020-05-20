@@ -89,7 +89,6 @@ splitterRouter
                     splitterToUpdate
                 )
                     .then(splitter => {
-                        console.log(splitter)
                         res
                             .status(200)
                             .json(SplitterService.serializeSplitter(splitter))
