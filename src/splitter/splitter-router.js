@@ -12,9 +12,9 @@ splitterRouter
     .all(bodyParser)
     .post((req, res, next) => {
         // add new splitter
-        const { item_id, nickname, avatar, share_qty } = req.body;
+        const { nickname, avatar } = req.body;
 
-        for (const field of ['item_id', 'nickname', 'avatar', 'share_qty']) {
+        for (const field of ['nickname', 'avatar']) {
             if (req.body[field] == null) {
                 return res.status(400).json({
                     error: `Missing '${field}' in request body`
@@ -23,10 +23,8 @@ splitterRouter
         };
 
         const newSplitter = {
-            item_id,
             nickname,
-            avatar,
-            share_qty
+            avatar
         };
 
         SplitterService.insertSplitter(
@@ -53,20 +51,18 @@ splitterRouter
         const { 
             nickname = undefined,
             avatar = undefined,
-            share_qty = undefined,
             deleted = null
         } = req.body;
 
-        if (!req.body.nickname && !req.body.avatar && !req.body.share_qty && !req.body.deleted) {
+        if (!req.body.nickname && !req.body.avatar && !req.body.deleted) {
             return res.status(400).json({
-                error: `Request body must contain one of 'nickname', 'avatar, 'share_qty', or 'deleted'`
+                error: `Request body must contain one of 'nickname', 'avatar, or 'deleted'`
             })
         }
      
         const splitterToUpdate = {
             nickname,
             avatar,
-            share_qty,
             deleted
         };
 
@@ -92,6 +88,107 @@ splitterRouter
                         res
                             .status(200)
                             .json(SplitterService.serializeSplitter(splitter))
+                    })
+                    .catch(next)
+            })
+    })
+
+splitterRouter
+    .route('/:splitter_id/:item_id')
+    .all(requireAuth)
+    .all(bodyParser)
+    .post((req, res, next) => {
+        const { splitter_id, item_id } = req.params;
+        const {  share_qty } = req.body;
+
+        if (!req.body.share_qty) {
+            return res.status(400).json({
+                error: `Request body must contain 'share_qty'`
+            })
+        }
+     
+        const newSplit = {
+            splitter_id,
+            item_id,
+            share_qty
+        };
+
+        SplitterService.hasItemSplitter(
+            req.app.get('db'),
+            splitter_id,
+            item_id
+        )
+            .then(hasSplitterWithId => {
+                if (hasSplitterWithId) {
+                    newSplit.deleted = null;
+
+                    return SplitterService.updateSplit(
+                        req.app.get('db'),
+                        splitter_id,
+                        item_id,
+                        newSplit
+                    )
+                        .then(split => {
+                            res
+                                .status(200)
+                                .json(SplitterService.serializeSplit(split))
+                        })
+                        .catch(next)
+                }
+
+                SplitterService.insertItemSplitter(
+                    req.app.get('db'),
+                    newSplit
+                )
+                    .then(split => {
+                        return res
+                            .status(201)
+                            .location(path.posix.join(req.originalUrl, `/${split.splitter_id}`))
+                            .json(SplitterService.serializeSplit(split))
+                    })
+                    .catch(next)
+            })
+    })
+    .patch((req, res, next) => {
+        // update split
+        const { splitter_id, item_id } = req.params;
+        const {  share_qty = undefined, deleted = null } = req.body;
+
+        if (!req.body.share_qty && !req.body.deleted) {
+            return res.status(400).json({
+                error: `Request body must contain one of 'share_qty' or 'deleted'`
+            })
+        }
+     
+        const splitToUpdate = {
+            share_qty,
+            deleted
+        };
+
+        SplitterService.hasItemSplitter(
+            req.app.get('db'),
+            splitter_id,
+            item_id
+        )
+            .then(hasSplitterWithId => {
+                if (!hasSplitterWithId) {
+                    return res
+                        .status(400)
+                        .json({
+                            error: `Splitter for this item does not exist`
+                        })
+                }
+
+                return SplitterService.updateSplit(
+                    req.app.get('db'),
+                    splitter_id,
+                    item_id,
+                    splitToUpdate
+                )
+                    .then(split => {
+                        res
+                            .status(200)
+                            .json(SplitterService.serializeSplit(split))
                     })
                     .catch(next)
             })

@@ -121,8 +121,8 @@ const BillService = {
                                     'share_qty', belly_item_splitter.share_qty,
                                     'created_at', belly_item_splitter.created_at
                                 )
-                                FROM belly_splitter
-                                JOIN belly_item_splitter
+                                FROM belly_item_splitter
+                                JOIN belly_splitter
                                 ON belly_splitter.id = belly_item_splitter.splitter_id
                                 WHERE belly_item_splitter.item_id = belly_item.id
                                 AND belly_item_splitter.deleted is null
