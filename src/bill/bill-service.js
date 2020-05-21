@@ -221,7 +221,7 @@ const BillService = {
             fees: xss(bill.fees)
         }
     },
-    insertBill(db, newBill) {
+    insertOwnedBill(db, newBill) {
         return db
             .insert(newBill)
             .into('belly_bill')
@@ -229,6 +229,16 @@ const BillService = {
             .then(([bill]) => bill)
             .then(bill =>
                 BillService.getBillById(db, bill.id)
+            )
+    },
+    insertSharedBill(db, newSharedBill) {
+        return db
+            .insert(newSharedBill)
+            .into('belly_user_bill')
+            .returning('*')
+            .then(([bill]) => bill)
+            .then(bill =>
+                BillService.getBillById(db, bill.bill_id)
             )
     },
     updateBill(db, id, billToUpdate) {

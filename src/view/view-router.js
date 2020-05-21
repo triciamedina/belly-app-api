@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const  { requireAuth } = require('../middleware/jwt-auth');
 const ViewService = require('./view-service');
+const BillService = require('../bill/bill-service');
 
 const viewRouter = express.Router();
 const bodyParser = express.json();
@@ -26,17 +27,53 @@ viewRouter
             bill_id
         };
 
-        ViewService.insertView(
+        BillService.hasOwnedBillWithId(
             req.app.get('db'),
-            newView
+            id,
+            bill_id,
         )
-            .then(view => {
-                return res
-                    .status(201)
-                    .location(path.posix.join(req.originalUrl, `/${view.id}`))
-                    .json(ViewService.serializeView(view))
+            .then(hasBillWithId => {
+                if (!hasBillWithId) {
+                    BillService.hasSharedBillWithId(
+                        req.app.get('db'),
+                        id,
+                        bill_id,
+                    )
+                        .then(hasBillWithId => {
+                            if (!hasBillWithId) {
+                                const newShared = {
+                                    user_id: id,
+                                    bill_id
+                                };
+
+                                BillService.insertSharedBill(
+                                    req.app.get('db'),
+                                    newShared
+                                )
+                                    .then(bill => {
+                                        res
+                                            .status(201)
+                                            .location(path.posix.join(req.originalUrl, `/${bill.id}`))
+                                            .json(BillService.serializeBillDetail(bill))
+                                    })
+                                    .catch(next)
+                            };
+                        })
+                        .catch(next)
+                }
+
+                return ViewService.insertView(
+                    req.app.get('db'),
+                    newView
+                )
+                    .then(view => {
+                        res
+                            .status(201)
+                            .location(path.posix.join(req.originalUrl, `/${view.id}`))
+                            .json(ViewService.serializeView(view))
+                    })
+                    .catch(next)
             })
-            .catch(next)
     })
 
 module.exports = viewRouter;

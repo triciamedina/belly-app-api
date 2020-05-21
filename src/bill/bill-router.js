@@ -28,53 +28,6 @@ const requireType = (req, res, next) => {
 }
 
 billRouter
-    .route('/')
-    .all(requireAuth)
-    .post(bodyParser, (req, res, next) => {
-        // Posting new bill to bills owned by user
-        
-        const { id } = req.user;
-        const { 
-            billName, 
-            billThumbnail, 
-            discounts, 
-            tax, 
-            tip, 
-            fees 
-        } = req.body;
-
-        for (const field of ['billName', 'billThumbnail', 'discounts', 'tax', 'tip', 'fees']) {
-            if (req.body[field] == null) {
-                return res.status(400).json({
-                    error: `Missing '${field}' in request body`
-                })
-            }
-        };
-        
-        const newBill = {
-            owner: id,
-            bill_name: billName,
-            bill_thumbnail: billThumbnail,
-            discounts,
-            tax,
-            tip,
-            fees
-        }
-
-        BillService.insertBill(
-            req.app.get('db'),
-            newBill
-        )
-            .then(bill => {
-                return res
-                    .status(201)
-                    .location(path.posix.join(req.originalUrl, `/${bill.id}`))
-                    .json(BillService.serializeBillDetail(bill))
-            })
-            .catch(next)
-    })
-
-billRouter
     .route('/:type')
     .all(requireAuth)
     .all(requireType)
@@ -106,6 +59,78 @@ billRouter
                     return res
                         .status(200)
                         .json({ sharedWithMe: bills.map(BillService.serializeBill) })
+                })
+                .catch(next)
+        }
+    })
+    .post(bodyParser, (req, res, next) => {
+        const { type } = req.params;
+        const { id } = req.user;
+
+        if (type === 'owned') {
+            const { 
+                billName, 
+                billThumbnail, 
+                discounts, 
+                tax, 
+                tip, 
+                fees 
+            } = req.body;
+
+            for (const field of ['billName', 'billThumbnail', 'discounts', 'tax', 'tip', 'fees']) {
+                if (req.body[field] == null) {
+                    return res.status(400).json({
+                        error: `Missing '${field}' in request body`
+                    })
+                }
+            };
+            
+            const newBill = {
+                owner: id,
+                bill_name: billName,
+                bill_thumbnail: billThumbnail,
+                discounts,
+                tax,
+                tip,
+                fees
+            }
+
+            BillService.insertOwnedBill(
+                req.app.get('db'),
+                newBill
+            )
+                .then(bill => {
+                    return res
+                        .status(201)
+                        .location(path.posix.join(req.originalUrl, `/${bill.id}`))
+                        .json(BillService.serializeBillDetail(bill))
+                })
+                .catch(next)
+        }
+
+        if (type === 'shared') {
+            const { bill_id } = req.body;
+
+            if (!req.body.bill_id) {
+                return res.status(400).json({
+                    error: `Missing 'bill_id' in request body`
+                })
+            }
+
+            const newSharedBill = {
+                user_id: id,
+                bill_id,
+            }
+
+            BillService.insertSharedBill(
+                req.app.get('db'),
+                newSharedBill
+            )
+                .then(bill => {
+                    return res
+                        .status(201)
+                        .location(path.posix.join(req.originalUrl, `/${bill.id}`))
+                        .json(BillService.serializeBillDetail(bill))
                 })
                 .catch(next)
         }
