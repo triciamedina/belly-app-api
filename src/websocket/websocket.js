@@ -17,6 +17,7 @@ module.exports = uWS.App({})
             console.log('WS: Viewing bill', billId);
             ws.subscribe(`bill/${billId}/#`);
         },
+        idleTimeout: 0,
         message: (ws, message, _) => {
             const activity = JSON.parse(WebSocketService.ab2str(message));
             const billId = activity.billId;
