@@ -1,6 +1,7 @@
 const express = require('express');
 const path = require('path');
 const UserService = require('./user-service');
+const BillService = require('../bill/bill-service');
 const  { requireAuth } = require('../middleware/jwt-auth');
 
 const userRouter = express.Router();
@@ -81,4 +82,41 @@ userRouter
             .catch(next)
     });
 
+userRouter
+    .route('/:bill_id')
+    .get(requireAuth, (req, res, next) => {
+        const { id } = req.user;
+        const { bill_id } = req.params;
+
+        BillService.hasOwnedBillWithId(
+            req.app.get('db'),
+            id,
+            bill_id
+        )
+            .then(hasOwnedBillWithId => {
+                if (!hasOwnedBillWithId) {
+                    BillService.hasSharedBillWithId(
+                        req.app.get('db'),
+                        id, 
+                        bill_id
+                    )
+                        .then(hasSharedBillWithId => {
+                            if (!hasSharedBillWithId) {
+                                res
+                                .status(200)
+                                .json({ hasBillWithId: false })
+                            } else {
+                                res
+                                .status(200)
+                                .json({ hasBillWithId: true })
+                            }
+                        })
+                } else {
+                    res
+                        .status(200)
+                        .json({ hasBillWithId: true })
+                }
+            })
+            .catch(next)
+    })
 module.exports = userRouter;

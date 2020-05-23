@@ -31,7 +31,9 @@ module.exports = uWS.App({})
                     clients[billId] = {}
                 }
 
-                clients[billId][id] = activity.newUser;
+                // clients[billId][id] = activity.newUser;
+                const username = activity.newUser.nickname;
+                clients[billId][username] = activity.newUser;
 
                 ws.send(JSON.stringify({ viewerJoined: true, id: id }));
 
@@ -40,8 +42,8 @@ module.exports = uWS.App({})
             }
 
             if (activity.userExit) {
-                const id = activity.userExit;
-                delete clients[billId][id];
+                const username = activity.userExit;
+                delete clients[billId][username];
             
                 ws.publish(`bill/${billId}/users`, JSON.stringify({ updateViewers: true, clients: clients[billId] }));
                 ws.send(JSON.stringify({ viewerExited: true })); 
@@ -50,7 +52,7 @@ module.exports = uWS.App({})
             }
         },
         close: (ws, code, message) => {
-            console.log(code)
+            console.log(code, WebSocketService.ab2str(message))
         }
     })
     .any('/*', (res, _) => { 
