@@ -31,7 +31,6 @@ module.exports = uWS.App({})
                     clients[billId] = {}
                 }
 
-                // clients[billId][id] = activity.newUser;
                 const username = activity.newUser.nickname;
                 clients[billId][username] = activity.newUser;
 
@@ -49,6 +48,12 @@ module.exports = uWS.App({})
                 ws.send(JSON.stringify({ viewerExited: true })); 
 
                 console.log(clients)
+            }
+
+            if (activity.billUpdate) {
+                const billId = activity.billUpdate;
+
+                ws.publish(`bill/${billId}/update`, JSON.stringify({ updateBill: true }))
             }
         },
         close: (ws, code, message) => {
