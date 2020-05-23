@@ -27,6 +27,7 @@ viewRouter
             bill_id
         };
 
+        // Check if bill is owned
         BillService.hasOwnedBillWithId(
             req.app.get('db'),
             id,
@@ -34,6 +35,8 @@ viewRouter
         )
             .then(hasBillWithId => {
                 if (!hasBillWithId) {
+
+                    // Check if bill is shared
                     BillService.hasSharedBillWithId(
                         req.app.get('db'),
                         id,
@@ -41,11 +44,13 @@ viewRouter
                     )
                         .then(hasBillWithId => {
                             if (!hasBillWithId) {
+
                                 const newShared = {
                                     user_id: id,
                                     bill_id
                                 };
-
+                                
+                                // If neither, add as a shared bill
                                 BillService.insertSharedBill(
                                     req.app.get('db'),
                                     newShared
@@ -62,6 +67,7 @@ viewRouter
                         .catch(next)
                 }
 
+                // Insert new view for user
                 return ViewService.insertView(
                     req.app.get('db'),
                     newView
