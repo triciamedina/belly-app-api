@@ -24,7 +24,7 @@ app.listen(PORT, () => {
     console.info(`Http listening at http://localhost:${PORT}`);
 });
 
-const wss = new Server({ app });
+const wss = new Server({ server: app });
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
