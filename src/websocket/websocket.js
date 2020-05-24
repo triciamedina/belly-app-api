@@ -4,7 +4,7 @@ const WebSocketService = require('./websocket-service');
 
 const clients = {};
 
-module.exports = uWS.App({})
+module.exports = uWS.SSLApp({})
     .ws('/*', {
         open: (ws, req) => {
             console.log('WS: Hello', req);
