@@ -12,7 +12,7 @@ const db = knex({
 app.set('db', db);
 // app.set('ws', websocket);
 
-const wss = new Server({ app });
+const wss = new Server( app );
 
 wss.on('connection', (ws) => {
   console.log('Client connected');
