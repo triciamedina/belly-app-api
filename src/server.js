@@ -1,6 +1,6 @@
 const knex = require('knex');
 const app = require('./app');
-const websocket = require('./websocket/websocket');
+
 const { PORT, WS_PORT, DATABASE_URL } = require('./config');
 
 const db = knex({
@@ -11,7 +11,10 @@ const db = knex({
 app.set('db', db);
 app.set('ws', websocket);
 
-websocket.listen(PORT, (listenSocket) => {
+const server = require('http').createServer(app)
+const websocket = require('./websocket/websocket').listen(server);
+
+server.listen(PORT, (listenSocket) => {
     if (listenSocket) {
         console.info(`Websocket listening to port ${PORT}`);
     }
