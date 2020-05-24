@@ -11,7 +11,10 @@ const db = knex({
 app.set('db', db);
 app.set('ws', websocket);
 
-const server = require('http').createServer(app)
+const server = require('http').createServer(app);
+server.use(cors({
+    origin: CLIENT_ORIGIN
+}));
 const websocket = require('./websocket/websocket').listen(server);
 
 server.listen(PORT, (listenSocket) => {
