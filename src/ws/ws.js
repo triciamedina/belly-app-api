@@ -10,12 +10,18 @@ wss.on('connection', (ws) => {
 
     ws.on('message', function incoming(message) {
       const activity = JSON.parse(message);
+      const billId = activity.billId;
+
       console.log('received: ', message);
 
       if (activity.newUser) {
         console.log('new user entered')
         const id = WebSocketService.getUniqueID();
-        ws.send(JSON.stringify({ viewerJoined: true, id: id }))
+
+        ws.room = billId;
+
+        console.log(ws.room)
+
         // if (!clients[billId]) {
         //     clients[billId] = {}
         // }
@@ -23,7 +29,7 @@ wss.on('connection', (ws) => {
         // const username = activity.newUser.nickname;
         // clients[billId][username] = activity.newUser;
 
-        // ws.send(JSON.stringify({ viewerJoined: true, id: id }));
+        ws.send(JSON.stringify({ viewerJoined: true, id: id }))
 
         // ws.publish(`bill/${billId}/users`, JSON.stringify({ updateViewers: true, clients: clients[billId] }));
         // console.log(clients)
