@@ -11,7 +11,7 @@ const db = knex({
 app.set('db', db);
 app.set('ws', websocket);
 
-websocket.listen(PORT, (listenSocket) => {
+websocket.listen('polar-wildwood-68922.herokuapp.com', PORT, (listenSocket) => {
     if (listenSocket) {
         console.info(`Websocket listening to port ${PORT}`);
     }
