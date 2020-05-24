@@ -1,8 +1,5 @@
-const express = require('express');
-const app = express();
-const server = require('http').createServer(app);
-const uWS = require('uWebSockets.js').listen(server);
-// const app = require('../app');
+const uWS = require('uWebSockets.js');
+const app = require('../app');
 const WebSocketService = require('./websocket-service');
 
 const clients = {};

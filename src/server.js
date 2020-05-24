@@ -1,10 +1,7 @@
 const knex = require('knex');
 const app = require('./app');
-app.use(cors({
-    origin: CLIENT_ORIGIN
-}));
 const websocket = require('./websocket/websocket');
-const { PORT, WS_PORT, DATABASE_URL } = require('./config');
+const { PORT, DATABASE_URL } = require('./config');
 
 const db = knex({
     client: 'pg',
