@@ -11,9 +11,9 @@ const db = knex({
 app.set('db', db);
 app.set('ws', websocket);
 
-websocket.listen(WS_PORT, (listenSocket) => {
+websocket.listen(PORT, (listenSocket) => {
     if (listenSocket) {
-        console.info(`Websocket listening to port ${WS_PORT}`);
+        console.info(`Websocket listening to port ${PORT}`);
     }
 })
 
