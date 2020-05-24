@@ -12,17 +12,14 @@ app.set('db', db);
 app.set('ws', websocket);
 
 const server = require('http').createServer(app);
-server.use(cors({
-    origin: CLIENT_ORIGIN
-}));
 const websocket = require('./websocket/websocket').listen(server);
 
-server.listen(PORT, (listenSocket) => {
-    if (listenSocket) {
-        console.info(`Websocket listening to port ${PORT}`);
-    }
-})
+// server.listen(PORT, (listenSocket) => {
+//     if (listenSocket) {
+//         console.info(`Websocket listening to port ${PORT}`);
+//     }
+// })
 
-app.listen(PORT, () => {
+server.listen(PORT, () => {
     console.info(`Http listening at http://localhost:${PORT}`);
 });
