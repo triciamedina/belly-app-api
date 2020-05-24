@@ -1,6 +1,7 @@
 const server = require('http').createServer();
 const { Server } = require('ws');
 const wss = new Server({ server: server });
+const WebSocketService = require('../websocket/websocket-service');
 
 wss.on('connection', (ws) => {
     console.log('Client connected');
@@ -11,8 +12,8 @@ wss.on('connection', (ws) => {
 
       if (activity.newUser) {
         console.log('new user entered')
-        // const id = WebSocketService.getUniqueID();
-
+        const id = WebSocketService.getUniqueID();
+        ws.send(JSON.stringify({ viewerJoined: true, id: id }))
         // if (!clients[billId]) {
         //     clients[billId] = {}
         // }
