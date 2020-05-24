@@ -32,3 +32,5 @@ server.on('request', app);
 server.listen(PORT, () => {
     console.info(`Server listening at http://localhost:${PORT}`);
 });
+
+module.exports = server;
