@@ -3,6 +3,8 @@ const { Server } = require('ws');
 const wss = new Server({ server: server });
 const WebSocketService = require('../websocket/websocket-service');
 
+const clients = {};
+
 wss.on('connection', (ws) => {
     console.log('Client connected');
 
@@ -26,8 +28,19 @@ wss.on('connection', (ws) => {
         // ws.publish(`bill/${billId}/users`, JSON.stringify({ updateViewers: true, clients: clients[billId] }));
         // console.log(clients)
       }
-    });
 
+      if (activity.userExit) {
+        const username = activity.userExit;
+        console.log(`${username} exited`)
+        // delete clients[billId][username];
+    
+        // ws.publish(`bill/${billId}/users`, JSON.stringify({ updateViewers: true, clients: clients[billId] }));
+        ws.send(JSON.stringify({ viewerExited: true })); 
+
+        // console.log(clients)
+    }
+    });
+    
     ws.on('close', () => console.log('Client disconnected'));
   });
 
