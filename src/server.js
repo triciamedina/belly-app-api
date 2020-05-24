@@ -1,6 +1,6 @@
 const knex = require('knex');
 const app = require('./app');
-const server = require('http').createServer();
+const server = require('../src/ws/ws');
 const { PORT, DATABASE_URL } = require('./config');
 
 const db = knex({
@@ -33,4 +33,3 @@ server.listen(PORT, () => {
     console.info(`Server listening at http://localhost:${PORT}`);
 });
 
-module.exports = server;
