@@ -1,6 +1,5 @@
 const knex = require('knex');
 const app = require('./app');
-const { Server } = require('ws');
 const server = require('http').createServer();
 const { PORT, DATABASE_URL } = require('./config');
 
@@ -15,14 +14,14 @@ app.set('db', db);
 //     console.info(`Http listening at http://localhost:${PORT}`);
 // });
 
-const wss = new Server({ server: server });
+// const wss = new Server({ server: server });
 
 server.on('request', app);
 
-wss.on('connection', (ws) => {
-    console.log('Client connected');
-    ws.on('close', () => console.log('Client disconnected'));
-  });
+// wss.on('connection', (ws) => {
+//     console.log('Client connected');
+//     ws.on('close', () => console.log('Client disconnected'));
+//   });
   
 //   setInterval(() => {
 //     wss.clients.forEach((client) => {
