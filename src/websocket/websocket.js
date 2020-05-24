@@ -62,4 +62,4 @@ module.exports = uWS.SSLApp({})
     })
     .any('/*', (res, _) => { 
         res.end('No http');
-    });
+    })

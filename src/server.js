@@ -9,7 +9,7 @@ const db = knex({
 });
 
 app.set('db', db);
-app.set('ws', websocket);
+// app.set('ws', websocket);
 
 websocket.listen(WS_PORT, (listenSocket) => {
     if (listenSocket) {
