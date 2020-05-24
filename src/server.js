@@ -1,7 +1,7 @@
 const knex = require('knex');
 const app = require('./app');
 
-const { PORT, WS_PORT, DATABASE_URL } = require('./config');
+const { PORT, WS_PORT, DATABASE_URL, CLIENT_ORIGIN } = require('./config');
 
 const db = knex({
     client: 'pg',
@@ -14,11 +14,9 @@ app.set('ws', websocket);
 const server = require('http').createServer(app);
 const websocket = require('./websocket/websocket').listen(server);
 
-// server.listen(PORT, (listenSocket) => {
-//     if (listenSocket) {
-//         console.info(`Websocket listening to port ${PORT}`);
-//     }
-// })
+server.use(cors({
+    origin: CLIENT_ORIGIN
+}));
 
 server.listen(PORT, () => {
     console.info(`Http listening at http://localhost:${PORT}`);
