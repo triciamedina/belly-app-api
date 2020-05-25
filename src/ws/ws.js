@@ -1,7 +1,7 @@
 const server = require('http').createServer();
 const { Server } = require('ws');
 const wss = new Server({ server: server });
-const WebSocketService = require('../websocket/websocket-service');
+const WebSocketService = require('./ws-service');
 
 const clients = {};
 
@@ -35,15 +35,11 @@ wss.on('connection', (ws) => {
             client.send(JSON.stringify({ updateViewers: true, clients: clients[billId] }));
           }
         });
-
-        console.log(clients)
       }
 
       if (activity.userExit) {
         const billId = activity.billId;
         const username = activity.userExit;
-
-        console.log(`${username} exited`);
 
         delete clients[billId][username];
     
@@ -54,14 +50,11 @@ wss.on('connection', (ws) => {
             client.send(JSON.stringify({ updateViewers: true, clients: clients[billId] }));
           }
         });
-
-        console.log(clients)
       }
 
       if (activity.billUpdate) {
         
         const billId = activity.billUpdate;
-        console.log(billId, 'updating bill')
 
         wss.clients.forEach((client) => {
           if (client.room === billId) {
