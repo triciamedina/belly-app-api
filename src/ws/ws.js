@@ -59,8 +59,9 @@ wss.on('connection', (ws) => {
       }
 
       if (activity.billUpdate) {
-        console.log(billId, 'updating bill')
+        
         const billId = activity.billUpdate;
+        console.log(billId, 'updating bill')
 
         wss.clients.forEach((client) => {
           if (client.room === billId) {
