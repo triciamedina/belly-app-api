@@ -10,14 +10,15 @@ wss.on('connection', (ws) => {
 
     ws.on('message', function incoming(message) {
       const activity = JSON.parse(message);
-      const billId = activity.billId;
 
       console.log('received: ', message);
 
       if (activity.newUser) {
         console.log('new user entered')
 
+        const billId = activity.billId;
         const id = WebSocketService.getUniqueID();
+
         ws.room = billId;
 
         if (!clients[billId]) {
@@ -35,20 +36,38 @@ wss.on('connection', (ws) => {
           }
         });
 
-        // ws.publish(`bill/${billId}/users`, JSON.stringify({ updateViewers: true, clients: clients[billId] }));
-        // console.log(clients)
+        console.log(clients)
       }
 
       if (activity.userExit) {
+        const billId = activity.billId;
         const username = activity.userExit;
-        console.log(`${username} exited`)
+
+        console.log(`${username} exited`);
+
         delete clients[billId][username];
     
-        // ws.publish(`bill/${billId}/users`, JSON.stringify({ updateViewers: true, clients: clients[billId] }));
         ws.send(JSON.stringify({ viewerExited: true })); 
+        
+        wss.clients.forEach((client) => {
+          if (client.room === billId) {
+            client.send(JSON.stringify({ updateViewers: true, clients: clients[billId] }));
+          }
+        });
 
-        // console.log(clients)
-    }
+        console.log(clients)
+      }
+
+      if (activity.billUpdate) {
+        const billId = activity.billUpdate;
+
+        wss.clients.forEach((client) => {
+          if (client.room === billId) {
+            client.send(JSON.stringify({ updateBill: true }));
+          }
+        });
+
+      }
     });
     
     ws.on('close', () => console.log('Client disconnected'));
