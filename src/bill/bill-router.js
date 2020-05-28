@@ -25,7 +25,7 @@ const requireType = (req, res, next) => {
             })
     }
     next();
-}
+};
 
 billRouter
     .route('/:type')
@@ -35,7 +35,6 @@ billRouter
         const { type } = req.params;
         const { id } = req.user;
 
-        // get bills owned by user
         if (type === 'owned') {
             BillService.getOwnedBills(
                 req.app.get('db'),
@@ -49,7 +48,6 @@ billRouter
                 .catch(next)
         }
             
-        // get bills shared with user
         if (type === 'shared') {
             BillService.getSharedBills(
                 req.app.get('db'),
@@ -141,7 +139,6 @@ billRouter
     .all(requireAuth)
     .all(requireType)
     .get((req, res, next) => {
-        // Get details for single bill
 
         const { type, bill_id } = req.params;
 
@@ -202,7 +199,7 @@ billRouter
         }
     })
     .patch(bodyParser, (req, res, next) => {
-        // Edit details for existing bill
+
         const { type, bill_id } = req.params;
 
         const { 

@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 const  { requireAuth } = require('../middleware/jwt-auth');
 const ViewService = require('./view-service');
-const BillService = require('../bill/bill-service');
 
 const viewRouter = express.Router();
 const bodyParser = express.json();
@@ -26,7 +25,7 @@ viewRouter
             user_id: id,
             bill_id
         };
-        // Insert new view for user
+
         return ViewService.insertView(
             req.app.get('db'),
             newView
@@ -38,46 +37,5 @@ viewRouter
                     .json(ViewService.serializeView(view))
             })
         .catch(next)
-
 })
-        // BillService.hasOwnedBillWithId(
-        //     req.app.get('db'),
-        //     id,
-        //     bill_id,
-        // )
-        //     .then(hasBillWithId => {
-        //         if (!hasBillWithId) {
-
-        //             BillService.hasSharedBillWithId(
-        //                 req.app.get('db'),
-        //                 id,
-        //                 bill_id,
-        //             )
-        //                 .then(hasBillWithId => {
-        //                     if (!hasBillWithId) {
-
-        //                         const newShared = {
-        //                             user_id: id,
-        //                             bill_id
-        //                         };
-                                
-        //                         BillService.insertSharedBill(
-        //                             req.app.get('db'),
-        //                             newShared
-        //                         )
-        //                             .then(bill => {
-        //                                 res
-        //                                     .status(201)
-        //                                     .location(path.posix.join(req.originalUrl, `/${bill.id}`))
-        //                                     .json(BillService.serializeBillDetail(bill))
-        //                             })
-        //                             .catch(next)
-        //                     };
-        //                 })
-        //                 .catch(next)
-        //         }
-
-                
-
-
 module.exports = viewRouter;

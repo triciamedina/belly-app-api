@@ -11,7 +11,7 @@ splitterRouter
     .all(requireAuth)
     .all(bodyParser)
     .post((req, res, next) => {
-        // add new splitter
+
         const { nickname, avatar } = req.body;
 
         for (const field of ['nickname', 'avatar']) {
@@ -45,7 +45,7 @@ splitterRouter
     .all(requireAuth)
     .all(bodyParser)
     .patch((req, res, next) => {
-        // update splitter
+
         const { splitter_id } = req.params;
 
         const { 
@@ -98,6 +98,7 @@ splitterRouter
     .all(requireAuth)
     .all(bodyParser)
     .post((req, res, next) => {
+        
         const { splitter_id, item_id } = req.params;
         const {  share_qty } = req.body;
 
@@ -150,7 +151,7 @@ splitterRouter
             })
     })
     .patch((req, res, next) => {
-        // update split
+
         const { splitter_id, item_id } = req.params;
         const {  share_qty = undefined, deleted = null } = req.body;
 
