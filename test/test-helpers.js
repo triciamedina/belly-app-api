@@ -54,6 +54,15 @@ function seedUsers(db, users) {
         )
 };
 
+function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
+    const token = jwt.sign({ user_id: user.id }, secret, {
+        subject: user.username,
+        algorithm: 'HS256'
+    });
+
+    return `Bearer ${token}`;
+};
+
 function cleanTables(db) {
     return db.transaction(trx =>
         trx.raw(
@@ -90,5 +99,6 @@ module.exports = {
     makeUsersArray,
     makeBellyFixtures,
     cleanTables,
-    seedUsers
+    seedUsers,
+    makeAuthHeader
 }
