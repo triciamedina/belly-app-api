@@ -16,7 +16,7 @@ viewRouter
         for (const field of ['bill_id']) {
             if (req.body[field] == null) {
                 return res.status(400).json({
-                    error: `Missing '${field}' in request body`
+                    message: `Missing '${field}' in request body`
                 })
             }
         };

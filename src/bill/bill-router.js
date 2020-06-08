@@ -13,7 +13,7 @@ const requireType = (req, res, next) => {
         return res
             .status(400)
             .json({
-                error: `Missing 'type' in request parameters`
+                message: `Missing 'type' in request parameters`
             })
     }
 
@@ -21,7 +21,7 @@ const requireType = (req, res, next) => {
         return res
             .status(400)
             .json({
-                error: `Type parameter must be one of 'owned' or 'shared'`
+                message: `Type parameter must be one of 'owned' or 'shared'`
             })
     }
     next();
@@ -78,7 +78,7 @@ billRouter
             for (const field of ['billName', 'billThumbnail', 'discounts', 'tax', 'tip', 'fees']) {
                 if (req.body[field] == null) {
                     return res.status(400).json({
-                        error: `Missing '${field}' in request body`
+                        message: `Missing '${field}' in request body`
                     })
                 }
             };
@@ -111,7 +111,7 @@ billRouter
 
             if (!req.body.bill_id) {
                 return res.status(400).json({
-                    error: `Missing 'bill_id' in request body`
+                    message: `Missing 'bill_id' in request body`
                 })
             }
 
@@ -153,7 +153,7 @@ billRouter
                         return res
                             .status(400)
                             .json({ 
-                                error: `Bill with this id does not exist` 
+                                message: `Bill with this id does not exist` 
                             })
                     };
 
@@ -181,7 +181,7 @@ billRouter
                         return res
                             .status(400)
                             .json({ 
-                                error: `Bill with this id does not exist` 
+                                message: `Bill with this id does not exist` 
                             })
                     };
 
@@ -222,7 +222,7 @@ billRouter
                 && !req.body.deleted
             ) {
             return res.status(400).json({
-                error: `Request body must contain one of 'billName', 'billThumbnail', 'discounts', 'tax', 'tip', 'fees', or 'deleted'`
+                message: `Request body must contain one of 'billName', 'billThumbnail', 'discounts', 'tax', 'tip', 'fees', or 'deleted'`
             })
         }
 
@@ -247,7 +247,7 @@ billRouter
                         return res
                             .status(400)
                             .json({ 
-                                error: `Bill with this id does not exist` 
+                                message: `Bill with this id does not exist` 
                             })
                     };
 
@@ -276,7 +276,7 @@ billRouter
                         return res
                             .status(400)
                             .json({ 
-                                error: `Bill with this id does not exist` 
+                                message: `Bill with this id does not exist` 
                             })
                     };
 

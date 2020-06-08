@@ -9,7 +9,7 @@ function requireAuth(req, res, next) {
         return res
             .status(401)
             .json({
-                error: 'Missing bearer token'
+                message: 'Missing bearer token'
             })
     } else {
         bearerToken = authToken.slice(7, authToken.length)
@@ -27,7 +27,7 @@ function requireAuth(req, res, next) {
                     return res
                         .status(401)
                         .json({
-                            error: 'Unauthorized request'
+                            message: 'Unauthorized request'
                         })
                 }
                 req.user = user;
@@ -41,7 +41,7 @@ function requireAuth(req, res, next) {
         res
             .status(401)
             .json({
-                error: 'Unauthorized request'
+                message: 'Unauthorized request'
             })
     }
 };

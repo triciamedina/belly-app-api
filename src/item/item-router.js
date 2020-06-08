@@ -15,7 +15,7 @@ itemRouter
         for (const field of ['itemName', 'quantity', 'price', 'bill_id']) {
             if (req.body[field] == null) {
                 return res.status(400).json({
-                    error: `Missing '${field}' in request body`
+                    message: `Missing '${field}' in request body`
                 })
             }
         };
@@ -55,7 +55,7 @@ itemRouter
                     return res
                         .status(400)
                         .json({ 
-                            error: `Item with this id does not exist` 
+                            message: `Item with this id does not exist` 
                         })
                 };
 
@@ -78,7 +78,7 @@ itemRouter
 
         if (!req.body.itemName && !req.body.quantity && !req.body.price & !req.body.deleted) {
             return res.status(400).json({
-                error: `Request body must contain one of 'itemName', 'price', or 'quantity'`
+                message: `Request body must contain one of 'itemName', 'price', or 'quantity'`
             })
         }
      
@@ -98,7 +98,7 @@ itemRouter
                     return res
                         .status(400)
                         .json({
-                            error: `Item with this id does not exist`
+                            message: `Item with this id does not exist`
                         })
                 }
 

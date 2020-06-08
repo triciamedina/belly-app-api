@@ -17,7 +17,7 @@ splitterRouter
         for (const field of ['nickname', 'avatar']) {
             if (req.body[field] == null) {
                 return res.status(400).json({
-                    error: `Missing '${field}' in request body`
+                    message: `Missing '${field}' in request body`
                 })
             }
         };
@@ -56,7 +56,7 @@ splitterRouter
 
         if (!req.body.nickname && !req.body.avatar && !req.body.deleted) {
             return res.status(400).json({
-                error: `Request body must contain one of 'nickname', 'avatar, or 'deleted'`
+                message: `Request body must contain one of 'nickname', 'avatar, or 'deleted'`
             })
         }
      
@@ -75,7 +75,7 @@ splitterRouter
                     return res
                         .status(400)
                         .json({
-                            error: `Splitter with this id does not exist`
+                            message: `Splitter with this id does not exist`
                         })
                 }
 
@@ -104,7 +104,7 @@ splitterRouter
 
         if (!req.body.share_qty) {
             return res.status(400).json({
-                error: `Request body must contain 'share_qty'`
+                message: `Request body must contain 'share_qty'`
             })
         }
      
@@ -157,7 +157,7 @@ splitterRouter
 
         if (!req.body.share_qty && !req.body.deleted) {
             return res.status(400).json({
-                error: `Request body must contain one of 'share_qty' or 'deleted'`
+                message: `Request body must contain one of 'share_qty' or 'deleted'`
             })
         }
      
@@ -176,7 +176,7 @@ splitterRouter
                     return res
                         .status(400)
                         .json({
-                            error: `Splitter for this item does not exist`
+                            message: `Splitter for this item does not exist`
                         })
                 }
 

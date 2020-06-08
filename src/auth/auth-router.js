@@ -13,7 +13,7 @@ authRouter
                 return res
                     .status(400)
                     .json({
-                        error: `Missing '${key}' in request body`
+                        message: `Missing '${key}' in request body`
                     })
             };
 
@@ -26,7 +26,7 @@ authRouter
                         return res
                             .status(400)
                             .json({
-                                error: `Incorrect username or password`
+                                message: `Incorrect username or password`
                             })
                     };
 
@@ -36,7 +36,7 @@ authRouter
                                 return res
                                     .status(400)
                                     .json({
-                                        error: `Incorrect username or password`
+                                        message: `Incorrect username or password`
                                     })
                             };
 

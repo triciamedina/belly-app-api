@@ -31,7 +31,7 @@ userRouter
                 return res
                     .status(400)
                     .json({
-                        error: `Missing '${field}' in request body`
+                        message: `Missing '${field}' in request body`
                     })
             }
         };
@@ -42,7 +42,7 @@ userRouter
             return res
                 .status(400)
                 .json({ 
-                    error: passwordError
+                    message: passwordError
                 })
         };
 
@@ -55,7 +55,7 @@ userRouter
                     return res
                         .status(400)
                         .json({ 
-                            error: `Account with this username already exists` 
+                            message: `Account with this username already exists` 
                         })
                 };
                 
