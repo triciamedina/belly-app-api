@@ -136,4 +136,71 @@ describe('Bill Endpoints', function() {
             });
         });
     });
+
+    describe(`PATCH /api/bill/:type/:bill_id`, () => {
+        const updatedItem = {
+            itemName: 'test-item-updated',
+            quantity: 5,
+            price: 1.00
+        }
+
+        beforeEach('insert users', () =>
+            helpers.seedUsers(
+                db, 
+                testUsers,
+            )
+        );
+
+        beforeEach('insert bills', () =>
+            helpers.seedBills(
+                db, 
+                testBills,
+            )
+        );
+
+        beforeEach('insert user bill relations', () =>
+            helpers.seedUserBills(
+                db, 
+                testUserBills,
+            )
+        );
+
+        beforeEach('insert items', () =>
+            helpers.seedItems(
+                db, 
+                testItems,
+            )
+        );
+
+        context(`Happy path`, () => {
+            it(`responds 200, serialized item`, () => {
+                return supertest(app)
+                    .patch(`/api/item/${testItem.id}`)
+                    .set({'Authorization': token})
+                    .send(updatedItem)
+                    .expect(200)
+                    .expect(res => {
+                        console.log(res.body)
+                        expect(res.body.id).to.eql(testItem.id)
+                        expect(res.body.bill_id).to.eql(testItem.bill_id)
+                        expect(res.body.item_name).to.eql(updatedItem.itemName)
+                        expect(res.body.quantity).to.eql(updatedItem.quantity)
+                        expect(Number(res.body.price)).to.eql(updatedItem.price)
+                    })
+                    .expect(res => 
+                        db
+                            .from('belly_item')
+                            .select('*')
+                            .where({ id: testItem.id })
+                            .first()
+                            .then(row => {
+                                expect(row.item_name).to.eql(updatedItem.item_name)
+                                expect(Number(row.quantity)).to.eql(updatedItem.quantity)
+                                expect(Number(row.price)).to.eql(updatedItem.price)
+                            })
+                    )
+            });
+        });
+    });
+
 });
