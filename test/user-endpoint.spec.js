@@ -2,9 +2,8 @@ const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken');
 
-describe('Users Endpoints', function() {
+describe('User Endpoints', function() {
     let db;
 
     const { testUsers, testBills, testUserBills }  = helpers.makeBellyFixtures();
