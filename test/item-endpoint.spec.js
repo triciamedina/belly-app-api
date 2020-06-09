@@ -2,7 +2,7 @@ const knex = require('knex');
 const app = require('../src/app');
 const helpers = require('./test-helpers');
 
-describe('Bill Endpoints', function() {
+describe('Item Endpoints', function() {
     let db;
 
     const { testUsers, testBills, testUserBills, testItems, testSplitters, testItemSplitters, testViews }  = helpers.makeBellyFixtures();
@@ -180,7 +180,6 @@ describe('Bill Endpoints', function() {
                     .send(updatedItem)
                     .expect(200)
                     .expect(res => {
-                        console.log(res.body)
                         expect(res.body.id).to.eql(testItem.id)
                         expect(res.body.bill_id).to.eql(testItem.bill_id)
                         expect(res.body.item_name).to.eql(updatedItem.itemName)
