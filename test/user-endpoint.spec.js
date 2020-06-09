@@ -25,6 +25,33 @@ describe('Users Endpoints', function() {
 
     afterEach('cleanup', () => helpers.cleanTables(db));
 
+    describe(`GET /api/user`, () => {
+        context(`Happy path`, () => {
+            beforeEach('insert users', () =>
+                helpers.seedUsers(
+                    db, 
+                    testUsers,
+                )
+            );
+
+            it(`responds 200, serialized user`, () => {
+                return supertest(app)
+                    .get('/api/user')
+                    .set({'Authorization': token})
+                    .expect(200)
+                    .expect(res => {
+                        expect(res.body).to.have.property('id')
+                        expect(res.body.username).to.eql(testUser.username)
+                        expect(res.body).to.not.have.property('password')
+                        expect(res.body.avatar).to.eql(testUser.avatar)
+                        const expectedDate = new Date(testUser.created_at).toLocaleString()
+                        const actualDate = new Date(res.body.created_at).toLocaleString()
+                        expect(actualDate).to.eql(expectedDate)
+                    })
+            })
+        });
+    });
+
     describe(`POST /api/user`, () => {
         context(`User Validation`, () => {
             beforeEach('insert users', () =>
