@@ -27,7 +27,7 @@ const ViewService = {
     serializeView(view) {
         return {
             id: view.id,
-            bill_id: view.item_id,
+            bill_id: view.bill_id,
             user_id: view.user_id,
             last_viewed: new Date(view.last_viewed)
         }

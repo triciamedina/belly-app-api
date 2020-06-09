@@ -5,7 +5,7 @@ const helpers = require('./test-helpers');
 describe('Splitter Endpoints', function() {
     let db;
 
-    const { testUsers, testBills, testUserBills, testItems, testSplitters, testItemSplitters }  = helpers.makeBellyFixtures();
+    const { testUsers, testBills, testItems, testSplitters, testItemSplitters }  = helpers.makeBellyFixtures();
     const testUser = testUsers[0];
     const testSplitter = testSplitters[0];
     const testItem = testItems[0];
