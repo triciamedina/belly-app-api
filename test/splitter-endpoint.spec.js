@@ -7,7 +7,7 @@ describe('Splitter Endpoints', function() {
 
     const { testUsers, testBills, testUserBills, testItems, testSplitters, testItemSplitters, testViews }  = helpers.makeBellyFixtures();
     const testUser = testUsers[0];
-    const testItem = testItems[0];
+    const testSplitter = testSplitters[0];
     const token = helpers.makeAuthHeader(testUser);
 
     before('make knex instance', () => {
@@ -71,117 +71,51 @@ describe('Splitter Endpoints', function() {
         });
     });
 
-    // describe(`GET /api/item`, () => {
-    //     context(`Happy path`, () => {
-    //         beforeEach('insert users', () =>
-    //             helpers.seedUsers(
-    //                 db, 
-    //                 testUsers,
-    //             )
-    //         );
+    describe(`PATCH /api/splitter/:splitter_id`, () => {
+        const updatedSplitter = {
+            nickname: 'updated-splitter',
+            avatar: '#000000',
+        };
 
-    //         beforeEach('insert bills', () =>
-    //             helpers.seedBills(
-    //                 db, 
-    //                 testBills,
-    //             )
-    //         );
+        beforeEach('insert users', () =>
+            helpers.seedUsers(
+                db, 
+                testUsers,
+            )
+        );
 
-    //         beforeEach('insert user bill relations', () =>
-    //             helpers.seedUserBills(
-    //                 db, 
-    //                 testUserBills,
-    //             )
-    //         );
+        beforeEach('insert splitters', () =>
+            helpers.seedSplitters(
+                db, 
+                testSplitters,
+            )
+        );
 
-    //         beforeEach('insert items', () =>
-    //             helpers.seedItems(
-    //                 db, 
-    //                 testItems,
-    //             )
-    //         );
-
-    //         it(`responds 200, serialized item`, () => {
-    //             return supertest(app)
-    //                 .get(`/api/item/${testItem.id}`)
-    //                 .set({'Authorization': token})
-    //                 .expect(200)
-    //                 .expect(res => {
-    //                     expect(res.body.id).to.eql(testItem.id)
-    //                     expect(res.body.bill_id).to.eql(testItem.bill_id)
-    //                     expect(res.body.item_name).to.eql(testItem.item_name)
-    //                     expect(Number(res.body.quantity)).to.eql(testItem.quantity)
-    //                     expect(Number(res.body.price)).to.eql(testItem.price)
-    //                     expect(new Date(res.body.created_at)).to.eql(testItem.created_at)
-    //                 })
-    //         });
-    //     });
-    // });
-
-    // describe(`PATCH /api/bill/:type/:bill_id`, () => {
-    //     const updatedItem = {
-    //         itemName: 'test-item-updated',
-    //         quantity: 5,
-    //         price: 1.00
-    //     }
-
-    //     beforeEach('insert users', () =>
-    //         helpers.seedUsers(
-    //             db, 
-    //             testUsers,
-    //         )
-    //     );
-
-    //     beforeEach('insert bills', () =>
-    //         helpers.seedBills(
-    //             db, 
-    //             testBills,
-    //         )
-    //     );
-
-    //     beforeEach('insert user bill relations', () =>
-    //         helpers.seedUserBills(
-    //             db, 
-    //             testUserBills,
-    //         )
-    //     );
-
-    //     beforeEach('insert items', () =>
-    //         helpers.seedItems(
-    //             db, 
-    //             testItems,
-    //         )
-    //     );
-
-    //     context(`Happy path`, () => {
-    //         it(`responds 200, serialized item`, () => {
-    //             return supertest(app)
-    //                 .patch(`/api/item/${testItem.id}`)
-    //                 .set({'Authorization': token})
-    //                 .send(updatedItem)
-    //                 .expect(200)
-    //                 .expect(res => {
-    //                     console.log(res.body)
-    //                     expect(res.body.id).to.eql(testItem.id)
-    //                     expect(res.body.bill_id).to.eql(testItem.bill_id)
-    //                     expect(res.body.item_name).to.eql(updatedItem.itemName)
-    //                     expect(res.body.quantity).to.eql(updatedItem.quantity)
-    //                     expect(Number(res.body.price)).to.eql(updatedItem.price)
-    //                 })
-    //                 .expect(res => 
-    //                     db
-    //                         .from('belly_item')
-    //                         .select('*')
-    //                         .where({ id: testItem.id })
-    //                         .first()
-    //                         .then(row => {
-    //                             expect(row.item_name).to.eql(updatedItem.item_name)
-    //                             expect(Number(row.quantity)).to.eql(updatedItem.quantity)
-    //                             expect(Number(row.price)).to.eql(updatedItem.price)
-    //                         })
-    //                 )
-    //         });
-    //     });
-    // });
+        context(`Happy path`, () => {
+            it(`responds 200, serialized splitter`, () => {
+                return supertest(app)
+                    .patch(`/api/splitter/${testSplitter.id}`)
+                    .set({'Authorization': token})
+                    .send(updatedSplitter)
+                    .expect(200)
+                    .expect(res => {
+                        expect(res.body.id).to.eql(testSplitter.id)
+                        expect(res.body.nickname).to.eql(updatedSplitter.nickname)
+                        expect(res.body.avatar).to.eql(updatedSplitter.avatar)
+                    })
+                    .expect(res => 
+                        db
+                            .from('belly_splitter')
+                            .select('*')
+                            .where({ id: testSplitter.id })
+                            .first()
+                            .then(row => {
+                                expect(row.nickname).to.eql(updatedSplitter.nickname)
+                                expect(row.avatar).to.eql(updatedSplitter.avatar)
+                            })
+                    )
+            });
+        });
+    });
 
 });
