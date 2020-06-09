@@ -7,6 +7,7 @@ describe('Bill Endpoints', function() {
 
     const { testUsers, testBills, testUserBills, testItems, testSplitters, testItemSplitters, testViews }  = helpers.makeBellyFixtures();
     const testUser = testUsers[0];
+    const testItem = testItems[0];
     const token = helpers.makeAuthHeader(testUser);
 
     before('make knex instance', () => {
@@ -85,6 +86,53 @@ describe('Bill Endpoints', function() {
                                 expect(actualDate).to.eql(expectedDate)
                             })
                     )
+            });
+        });
+    });
+
+    describe(`GET /api/item`, () => {
+        context(`Happy path`, () => {
+            beforeEach('insert users', () =>
+                helpers.seedUsers(
+                    db, 
+                    testUsers,
+                )
+            );
+
+            beforeEach('insert bills', () =>
+                helpers.seedBills(
+                    db, 
+                    testBills,
+                )
+            );
+
+            beforeEach('insert user bill relations', () =>
+                helpers.seedUserBills(
+                    db, 
+                    testUserBills,
+                )
+            );
+
+            beforeEach('insert items', () =>
+                helpers.seedItems(
+                    db, 
+                    testItems,
+                )
+            );
+
+            it(`responds 200, serialized item`, () => {
+                return supertest(app)
+                    .get(`/api/item/${testItem.id}`)
+                    .set({'Authorization': token})
+                    .expect(200)
+                    .expect(res => {
+                        expect(res.body.id).to.eql(testItem.id)
+                        expect(res.body.bill_id).to.eql(testItem.bill_id)
+                        expect(res.body.item_name).to.eql(testItem.item_name)
+                        expect(Number(res.body.quantity)).to.eql(testItem.quantity)
+                        expect(Number(res.body.price)).to.eql(testItem.price)
+                        expect(new Date(res.body.created_at)).to.eql(testItem.created_at)
+                    })
             });
         });
     });
