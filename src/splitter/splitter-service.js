@@ -29,10 +29,10 @@ const SplitterService = {
             )
             .then(splitter => splitter)
     },
-    getSplitByIds(db, splitterId) {
+    getSplitByIds(db, splitterId, itemId) {
         return db
             .from('belly_item_splitter')
-            .where({ splitter_id: splitterId })
+            .where({ splitter_id: splitterId, item_id: itemId })
             .first()
             .select(
                 'belly_item_splitter.splitter_id',
@@ -95,7 +95,8 @@ const SplitterService = {
     serializeSplit(split) {
         return {
             splitter_id: split.splitter_id,
-            item_id: split.item,
+            item_id: split.item_id,
+            share_qty: split.share_qty,
             created_at: new Date(split.created_at)
         }
     },

@@ -5,7 +5,7 @@ const helpers = require('./test-helpers');
 describe('Item Endpoints', function() {
     let db;
 
-    const { testUsers, testBills, testUserBills, testItems, testSplitters, testItemSplitters, testViews }  = helpers.makeBellyFixtures();
+    const { testUsers, testBills, testUserBills, testItems }  = helpers.makeBellyFixtures();
     const testUser = testUsers[0];
     const testItem = testItems[0];
     const token = helpers.makeAuthHeader(testUser);
@@ -25,27 +25,27 @@ describe('Item Endpoints', function() {
     afterEach('cleanup', () => helpers.cleanTables(db));
 
     describe(`POST /api/item`, () => {
+        beforeEach('insert users', () =>
+            helpers.seedUsers(
+                db, 
+                testUsers,
+            )
+        );
+
+        beforeEach('insert bills', () =>
+            helpers.seedBills(
+                db, 
+                testBills,
+            )
+        );
+
+        beforeEach('insert user bill relations', () =>
+            helpers.seedUserBills(
+                db, 
+                testUserBills,
+            )
+        );
         context(`Happy path`, () => {
-            beforeEach('insert users', () =>
-                helpers.seedUsers(
-                    db, 
-                    testUsers,
-                )
-            );
-
-            beforeEach('insert bills', () =>
-                helpers.seedBills(
-                    db, 
-                    testBills,
-                )
-            );
-
-            beforeEach('insert user bill relations', () =>
-                helpers.seedUserBills(
-                    db, 
-                    testUserBills,
-                )
-            );
 
             it(`responds 201, serialized item`, () => {
                 const newItem = {
@@ -91,34 +91,35 @@ describe('Item Endpoints', function() {
     });
 
     describe(`GET /api/item`, () => {
+        beforeEach('insert users', () =>
+            helpers.seedUsers(
+                db, 
+                testUsers,
+            )
+        );
+
+        beforeEach('insert bills', () =>
+            helpers.seedBills(
+                db, 
+                testBills,
+            )
+        );
+
+        beforeEach('insert user bill relations', () =>
+            helpers.seedUserBills(
+                db, 
+                testUserBills,
+            )
+        );
+
+        beforeEach('insert items', () =>
+            helpers.seedItems(
+                db, 
+                testItems,
+            )
+        );
+
         context(`Happy path`, () => {
-            beforeEach('insert users', () =>
-                helpers.seedUsers(
-                    db, 
-                    testUsers,
-                )
-            );
-
-            beforeEach('insert bills', () =>
-                helpers.seedBills(
-                    db, 
-                    testBills,
-                )
-            );
-
-            beforeEach('insert user bill relations', () =>
-                helpers.seedUserBills(
-                    db, 
-                    testUserBills,
-                )
-            );
-
-            beforeEach('insert items', () =>
-                helpers.seedItems(
-                    db, 
-                    testItems,
-                )
-            );
 
             it(`responds 200, serialized item`, () => {
                 return supertest(app)
@@ -138,11 +139,6 @@ describe('Item Endpoints', function() {
     });
 
     describe(`PATCH /api/bill/:type/:bill_id`, () => {
-        const updatedItem = {
-            itemName: 'test-item-updated',
-            quantity: 5,
-            price: 1.00
-        }
 
         beforeEach('insert users', () =>
             helpers.seedUsers(
@@ -173,6 +169,12 @@ describe('Item Endpoints', function() {
         );
 
         context(`Happy path`, () => {
+            const updatedItem = {
+                itemName: 'test-item-updated',
+                quantity: 5,
+                price: 1.00
+            }
+            
             it(`responds 200, serialized item`, () => {
                 return supertest(app)
                     .patch(`/api/item/${testItem.id}`)

@@ -122,21 +122,21 @@ describe('Bill Endpoints', function() {
     });
 
     describe(`POST /api/bill/:type`, () => {
+        beforeEach('insert users', () =>
+            helpers.seedUsers(
+                db, 
+                testUsers,
+            )
+        );
+
+        beforeEach('insert bills', () =>
+            helpers.seedBills(
+                db, 
+                testBills,
+            )
+        );
+
         context(`Happy path`, () => {
-            beforeEach('insert users', () =>
-                helpers.seedUsers(
-                    db, 
-                    testUsers,
-                )
-            );
-
-            beforeEach('insert bills', () =>
-                helpers.seedBills(
-                    db, 
-                    testBills,
-                )
-            );
-
             it(`responds 201, serialized owned bill`, () => {
 
                 const newBill = {
@@ -223,31 +223,30 @@ describe('Bill Endpoints', function() {
     });
 
     describe(`GET /api/bill/:type/:bill_id`, () => {
-        context(`Happy path`, () => {
+        beforeEach('insert users', () =>
+            helpers.seedUsers(
+                db, 
+                testUsers,
+            )
+        );
 
+        beforeEach('insert bills', () =>
+            helpers.seedBills(
+                db, 
+                testBills,
+            )
+        );
+
+        beforeEach('insert user bill relations', () =>
+            helpers.seedUserBills(
+                db, 
+                testUserBills,
+            )
+        );
+
+        context(`Happy path`, () => {
             const ownedBill = testBills[0];
             const sharedBill = testBills[1];
-
-            beforeEach('insert users', () =>
-                helpers.seedUsers(
-                    db, 
-                    testUsers,
-                )
-            );
-
-            beforeEach('insert bills', () =>
-                helpers.seedBills(
-                    db, 
-                    testBills,
-                )
-            );
-
-            beforeEach('insert user bill relations', () =>
-                helpers.seedUserBills(
-                    db, 
-                    testUserBills,
-                )
-            );
 
             it(`responds 200, serialized bill when user owns bill`, () => {
                 return supertest(app)
@@ -286,22 +285,8 @@ describe('Bill Endpoints', function() {
     });
 
     describe(`PATCH /api/bill/:type/:bill_id`, () => {
-        context(`Happy path`, () => {
-
-            const ownedBill = testBills[0];
-            const sharedBill = testBills[1];
-
-            const updatedBill = {
-                billName: 'test bill',
-                billThumbnail: '🍜',
-                discounts: 3.50,
-                tax: 2.95,
-                tip: 5.55,
-                fees: 2.00
-            };
-
-            beforeEach('insert users', () =>
-                helpers.seedUsers(
+        beforeEach('insert users', () =>
+            helpers.seedUsers(
                     db, 
                     testUsers,
                 )
@@ -320,6 +305,19 @@ describe('Bill Endpoints', function() {
                     testUserBills,
                 )
             );
+        context(`Happy path`, () => {
+
+            const ownedBill = testBills[0];
+            const sharedBill = testBills[1];
+
+            const updatedBill = {
+                billName: 'test bill',
+                billThumbnail: '🍜',
+                discounts: 3.50,
+                tax: 2.95,
+                tip: 5.55,
+                fees: 2.00
+            };
 
             it(`responds 200, serialized bill when user owns bill`, () => {
                 return supertest(app)

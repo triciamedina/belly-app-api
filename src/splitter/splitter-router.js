@@ -120,7 +120,9 @@ splitterRouter
             item_id
         )
             .then(hasSplitterWithId => {
+                // If splitter/item relation existed before and was marked as deleted
                 if (hasSplitterWithId) {
+                    // Unmark as deleted
                     newSplit.deleted = null;
 
                     return SplitterService.updateSplit(
@@ -136,7 +138,7 @@ splitterRouter
                         })
                         .catch(next)
                 }
-
+                // Otherwise add new split
                 SplitterService.insertItemSplitter(
                     req.app.get('db'),
                     newSplit
