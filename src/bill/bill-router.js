@@ -104,7 +104,7 @@ billRouter
                         .json(BillService.serializeBillDetail(bill))
                 })
                 .catch(next)
-        }
+        };
 
         if (type === 'shared') {
             const { bill_id } = req.body;
@@ -131,7 +131,7 @@ billRouter
                         .json(BillService.serializeBillDetail(bill))
                 })
                 .catch(next)
-        }
+        };
     });
 
 billRouter
@@ -168,7 +168,7 @@ billRouter
                         })
                         .catch(next)
                 })
-        }
+        };
 
         if (type === 'shared') {
             BillService.hasSharedBillWithId(
@@ -224,7 +224,7 @@ billRouter
             return res.status(400).json({
                 message: `Request body must contain one of 'billName', 'billThumbnail', 'discounts', 'tax', 'tip', 'fees', or 'deleted'`
             })
-        }
+        };
 
         const billToUpdate = {
             bill_name: billName,
@@ -234,7 +234,7 @@ billRouter
             tip,
             fees,
             deleted
-        }
+        };
 
         if (type === 'owned') {
             BillService.hasOwnedBillWithId(

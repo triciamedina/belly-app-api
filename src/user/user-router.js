@@ -32,8 +32,8 @@ userRouter
                     .status(400)
                     .json({
                         message: `Missing '${field}' in request body`
-                    })
-            }
+                    });
+            };
         };
 
         const passwordError = UserService.validatePassword(password);
@@ -43,7 +43,7 @@ userRouter
                 .status(400)
                 .json({ 
                     message: passwordError
-                })
+                });
         };
 
         UserService.hasUserWithUsername(
@@ -56,7 +56,7 @@ userRouter
                         .status(400)
                         .json({ 
                             message: `Account with this username already exists` 
-                        })
+                        });
                 };
                 
                 return UserService.hashPassword(password)
@@ -119,4 +119,5 @@ userRouter
             })
             .catch(next)
     })
+
 module.exports = userRouter;

@@ -13,8 +13,8 @@ describe('Bill Endpoints', function() {
         db = knex({
             client: 'pg',
             connection: process.env.TEST_DATABASE_URL,
-        })
-        app.set('db', db)
+        });
+        app.set('db', db);
     });
 
     after('disconnect from db', () => db.destroy());
@@ -93,7 +93,7 @@ describe('Bill Endpoints', function() {
                             expect(res.body.ownedByMe[field]).to.have.property('items')
                             const items = res.body.ownedByMe[field].items
                             expect(items).to.be.an('array')
-                        }
+                        };
                     })
             });
 
@@ -286,25 +286,26 @@ describe('Bill Endpoints', function() {
 
     describe(`PATCH /api/bill/:type/:bill_id`, () => {
         beforeEach('insert users', () =>
-            helpers.seedUsers(
-                    db, 
-                    testUsers,
-                )
-            );
+        helpers.seedUsers(
+                db, 
+                testUsers,
+            )
+        );
 
-            beforeEach('insert bills', () =>
-                helpers.seedBills(
-                    db, 
-                    testBills,
-                )
-            );
+        beforeEach('insert bills', () =>
+            helpers.seedBills(
+                db, 
+                testBills,
+            )
+        );
 
-            beforeEach('insert user bill relations', () =>
-                helpers.seedUserBills(
-                    db, 
-                    testUserBills,
-                )
-            );
+        beforeEach('insert user bill relations', () =>
+            helpers.seedUserBills(
+                db, 
+                testUserBills,
+            )
+        );
+        
         context(`Happy path`, () => {
 
             const ownedBill = testBills[0];

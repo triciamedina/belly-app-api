@@ -1,5 +1,4 @@
 const uWS = require('uWebSockets.js');
-const app = require('../app');
 const WebSocketService = require('../ws/ws-service');
 
 const clients = {};

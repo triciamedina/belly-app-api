@@ -14,7 +14,7 @@ describe('Auth Endpoints', function() {
             client: 'pg',
             connection: process.env.TEST_DATABASE_URL,
         })
-        app.set('db', db)
+        app.set('db', db);
     });
 
     after('disconnect from db', () => db.destroy());

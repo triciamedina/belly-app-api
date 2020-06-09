@@ -17,8 +17,8 @@ viewRouter
             if (req.body[field] == null) {
                 return res.status(400).json({
                     message: `Missing '${field}' in request body`
-                })
-            }
+                });
+            };
         };
 
         const newView = {
@@ -38,4 +38,5 @@ viewRouter
             })
         .catch(next)
 })
+
 module.exports = viewRouter;

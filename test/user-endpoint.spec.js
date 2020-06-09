@@ -14,8 +14,8 @@ describe('User Endpoints', function() {
         db = knex({
             client: 'pg',
             connection: process.env.TEST_DATABASE_URL,
-        })
-        app.set('db', db)
+        });
+        app.set('db', db);
     });
 
     after('disconnect from db', () => db.destroy());
@@ -47,7 +47,7 @@ describe('User Endpoints', function() {
                         const actualDate = new Date(res.body.created_at).toLocaleString()
                         expect(actualDate).to.eql(expectedDate)
                     })
-            })
+            });
         });
     });
 
@@ -210,7 +210,7 @@ describe('User Endpoints', function() {
             const userWithNoBills = testUsers[2];
             const userWithNoBillsToken = helpers.makeAuthHeader(userWithNoBills);
 
-            const billId = testBills[0].id
+            const billId = testBills[0].id;
 
             beforeEach('insert users', () =>
                 helpers.seedUsers(

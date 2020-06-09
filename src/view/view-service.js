@@ -1,5 +1,3 @@
-const xss = require('xss');
-
 const ViewService = {
     getViewById(db, id) {
         return db

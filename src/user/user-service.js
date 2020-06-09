@@ -6,17 +6,17 @@ const UserService = {
     validatePassword(password) {
         if (password.length < 8) {
             return 'Password must be longer than 8 characters'
-        }
+        };
         if (password.length > 36) {
             return 'Password must be less than 36 characters'
-        }
+        };
         if (password.startsWith(' ') || password.endsWith(' ')) {
             return 'Password must not start or end with empty spaces'
-        }
+        };
         if (!REGEX_INCLUDES_NUMBER.test(password)) {
             return 'Password must contain at least 1 number'
-        }
-        return null
+        };
+        return null;
     },
     hasUserWithUsername(db, username) {
         return db('belly_user')
@@ -49,6 +49,6 @@ const UserService = {
             .where({ id })
             .then(([user]) => user)
     },
-}
+};
 
 module.exports = UserService;

@@ -43,7 +43,7 @@ function requireAuth(req, res, next) {
             .json({
                 message: 'Unauthorized request'
             })
-    }
+    };
 };
 
 module.exports = {

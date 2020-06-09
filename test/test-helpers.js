@@ -218,7 +218,7 @@ function makeViewsArray() {
             last_viewed: new Date('2020-01-04T23:28:56.782Z')
         },
     ]
-}
+};
 
 function seedUsers(db, users) {
     const preppedUsers = users.map(user => ({
@@ -336,4 +336,4 @@ module.exports = {
     seedSplitters,
     seedItemSplitters,
     seedViews
-}
+};

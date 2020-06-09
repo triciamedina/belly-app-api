@@ -22,8 +22,8 @@ wss.on('connection', (ws) => {
         ws.room = billId;
 
         if (!clients[billId]) {
-            clients[billId] = {}
-        }
+            clients[billId] = {};
+        };
 
         const username = activity.newUser.nickname;
         clients[billId][username] = activity.newUser;
@@ -33,7 +33,7 @@ wss.on('connection', (ws) => {
         wss.clients.forEach((client) => {
           if (client.room === billId) {
             client.send(JSON.stringify({ updateViewers: true, clients: clients[billId] }));
-          }
+          };
         });
       }
 
@@ -59,7 +59,7 @@ wss.on('connection', (ws) => {
         wss.clients.forEach((client) => {
           if (client.room === billId) {
             client.send(JSON.stringify({ updateBill: true }));
-          }
+          };
         });
 
       }

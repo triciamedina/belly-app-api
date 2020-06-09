@@ -14,8 +14,8 @@ describe('Item Endpoints', function() {
         db = knex({
             client: 'pg',
             connection: process.env.TEST_DATABASE_URL,
-        })
-        app.set('db', db)
+        });
+        app.set('db', db);
     });
 
     after('disconnect from db', () => db.destroy());
@@ -173,8 +173,8 @@ describe('Item Endpoints', function() {
                 itemName: 'test-item-updated',
                 quantity: 5,
                 price: 1.00
-            }
-            
+            };
+
             it(`responds 200, serialized item`, () => {
                 return supertest(app)
                     .patch(`/api/item/${testItem.id}`)

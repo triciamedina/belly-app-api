@@ -100,6 +100,6 @@ const SplitterService = {
             created_at: new Date(split.created_at)
         }
     },
-}
+};
 
 module.exports = SplitterService;
