@@ -3,7 +3,9 @@ const jwt = require('jsonwebtoken');
 
 function makeBellyFixtures() {
     const testUsers = makeUsersArray();
-    return { testUsers };
+    const testBills = makeBillsArray();
+    const testUserBills = makeUserBillsArray();
+    return { testUsers, testBills, testUserBills };
 };
 
 function makeUsersArray() {
@@ -39,6 +41,46 @@ function makeUsersArray() {
     ]
 };
 
+function makeBillsArray() {
+    return [
+        {
+            id: 1,
+            owner: 1,
+            bill_name: 'test-bill-1',
+            bill_thumbnail: '🌯',
+            discounts: 1,
+            tax: 1.50,
+            tip: 1.25,
+            fees: 0.50,
+            created_at: new Date('2020-01-01T23:28:56.782Z'),
+        },
+        {
+            id: 2,
+            owner: 2,
+            bill_name: 'test-bill-2',
+            bill_thumbnail: '🐓',
+            discounts: 5.00,
+            tax: 4.50,
+            tip: 10.25,
+            fees: 0,
+            created_at: new Date('2020-01-02T23:28:56.782Z'),
+        },
+    ]
+};
+
+function makeUserBillsArray() {
+    return [
+        {
+            user_id: 1,
+            bill_id: 2
+        },
+        {
+            user_id: 2,
+            bill_id: 1
+        },
+    ]
+};
+
 function seedUsers(db, users) {
     const preppedUsers = users.map(user => ({
         ...user,
@@ -52,6 +94,20 @@ function seedUsers(db, users) {
                 [users[users.length - 1].id],
             )
         )
+};
+
+function seedBills(db, bills) {
+    return db.into('belly_bill').insert(bills)
+        .then(() =>
+            db.raw(
+                `SELECT setval('belly_bill_id_seq', ?)`,
+                [bills[bills.length - 1].id],
+            )
+        )
+};
+
+function seedUserBills(db, userBills) {
+    return db.into('belly_user_bill').insert(userBills);
 };
 
 function makeAuthHeader(user, secret = process.env.JWT_SECRET) {
@@ -100,5 +156,7 @@ module.exports = {
     makeBellyFixtures,
     cleanTables,
     seedUsers,
+    seedBills,
+    seedUserBills,
     makeAuthHeader
 }

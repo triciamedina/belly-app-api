@@ -7,7 +7,7 @@ const jwt = require('jsonwebtoken');
 describe('Users Endpoints', function() {
     let db;
 
-    const { testUsers }  = helpers.makeBellyFixtures();
+    const { testUsers, testBills, testUserBills }  = helpers.makeBellyFixtures();
     const testUser = testUsers[0];
     const token = helpers.makeAuthHeader(testUser);
 
@@ -196,6 +196,63 @@ describe('Users Endpoints', function() {
                                 expect(compareMatch).to.be.true
                             })
                     )
+            });
+        });
+    });
+
+    describe(`GET /api/user/:bill_id`, () => {
+        context(`Happy path`, () => {
+            const userWithOwnedBill = testUser;
+            const userWithOwnedBillToken = token;
+
+            const userWithSharedBill = testUsers[1];
+            const userWithSharedBillToken = helpers.makeAuthHeader(userWithSharedBill);
+
+            const userWithNoBills = testUsers[2];
+            const userWithNoBillsToken = helpers.makeAuthHeader(userWithNoBills);
+
+            const billId = testBills[0].id
+
+            beforeEach('insert users', () =>
+                helpers.seedUsers(
+                    db, 
+                    testUsers,
+                )
+            );
+
+            beforeEach('insert bills', () =>
+                helpers.seedBills(
+                    db, 
+                    testBills,
+                )
+            );
+
+            beforeEach('insert user bill relations', () =>
+                helpers.seedUserBills(
+                    db, 
+                    testUserBills,
+                )
+            );
+
+            it(`responds 200, true when user owns bill`, () => {
+                return supertest(app)
+                    .get(`/api/user/${billId}`)
+                    .set({'Authorization': userWithOwnedBillToken})
+                    .expect(200, { hasBillWithId: true })
+            });
+
+            it(`responds 200, true when bill has been shared with user`, () => {
+                return supertest(app)
+                    .get(`/api/user/${billId}`)
+                    .set({'Authorization': userWithSharedBillToken})
+                    .expect(200, { hasBillWithId: true })
+            });
+
+            it(`responds 200, false when bill and user relation does not exist`, () => {
+                return supertest(app)
+                    .get(`/api/user/${billId}`)
+                    .set({'Authorization': userWithNoBillsToken})
+                    .expect(200, { hasBillWithId: false })
             });
         });
     });
