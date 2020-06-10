@@ -2,71 +2,6 @@
 
 The REST API for [Belly](https://github.com/triciamedina/belly-app).
 
-## Getting Started
-
-### Setting up
-
-Install dependencies
-
-```
-npm install
-```
-
-Create development and test databases
-
-```
-createdb belly
-createdb belly-test
-```
-
-Create database user
-
-```
-createduser belly
-```
-
-Grant priveleges to new user in `psql`
-
-```
-GRANT ALL PRIVELEGES ON DATABASE belly TO belly
-GRANT ALL PRIVELEGES ON DATABASE "belly-test" TO belly
-```
-
-Bootstrap development database
-
-```
-npm run migrate 
-```
-
-Bootstrap test database
-
-```
-npm run migrate:test
-```
-
-### Sample Data
-
-To seed the database for development
-
-```
-psql -U belly -d belly -a -f seeds/seed.belly_user.sql
-```
-
-### Testing
-
-Run tests with Mocha, Chai, and SuperTest.
-
-```
-npm run test
-```
-
-## Built With
-- [ws: a Node.js WebSocket library](https://github.com/websockets/ws)
-- [Node](https://nodejs.org/en/docs/)
-- [Express](https://expressjs.com/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [Moment.js](https://momentjs.com/)
-
 ## Login
 
 Returns a JWT allowing the user to access routes, services, and resources that are permitted with that token.
@@ -580,3 +515,68 @@ Status: 200 OK
     "created_at": "2020-02-07T13:23:12.378Z"
 }
 ```
+
+## Getting Started
+
+### Setting up
+
+Install dependencies
+
+```
+npm install
+```
+
+Create development and test databases
+
+```
+createdb belly
+createdb belly-test
+```
+
+Create database user
+
+```
+createduser belly
+```
+
+Grant priveleges to new user in `psql`
+
+```
+GRANT ALL PRIVELEGES ON DATABASE belly TO belly
+GRANT ALL PRIVELEGES ON DATABASE "belly-test" TO belly
+```
+
+Bootstrap development database
+
+```
+npm run migrate 
+```
+
+Bootstrap test database
+
+```
+npm run migrate:test
+```
+
+### Sample Data
+
+To seed the database for development
+
+```
+psql -U belly -d belly -a -f seeds/seed.belly_user.sql
+```
+
+### Testing
+
+Run tests with Mocha, Chai, and SuperTest.
+
+```
+npm run test
+```
+
+## Built With
+- [ws: a Node.js WebSocket library](https://github.com/websockets/ws)
+- [Node](https://nodejs.org/en/docs/)
+- [Express](https://expressjs.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Moment.js](https://momentjs.com/)
