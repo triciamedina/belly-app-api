@@ -4,11 +4,18 @@ Belly is a real-time bill splitting calculator for collaborating with others on 
 ## Live App
 https://belly-app.now.sh/
 
+
+## Built With
+- [ws: a Node.js WebSocket library](https://github.com/websockets/ws)
+- [Node](https://nodejs.org/en/docs/)
+- [Express](https://expressjs.com/)
+- [PostgreSQL](https://www.postgresql.org/)
+- [Moment.js](https://momentjs.com/)
+
 ## REST API
 
 The REST API for [Belly](https://github.com/triciamedina/belly-app).
 - [Getting Started](#getting-started)
-- [Built With](#built-with)
 - [Login](#login)
 - [Create a user](#create-user)
 - [Fetch a user](#fetch-user)
@@ -86,13 +93,6 @@ Run tests with Mocha, Chai, and SuperTest.
 ```
 npm run test
 ```
-
-## <a id="built-with"></a> Built With
-- [ws: a Node.js WebSocket library](https://github.com/websockets/ws)
-- [Node](https://nodejs.org/en/docs/)
-- [Express](https://expressjs.com/)
-- [PostgreSQL](https://www.postgresql.org/)
-- [Moment.js](https://momentjs.com/)
 
 ## <a id="login"></a> Login
 
