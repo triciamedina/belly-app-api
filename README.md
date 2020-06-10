@@ -1,4 +1,4 @@
-# Roots REST API
+# Belly REST API
 
 The REST API for [Belly](https://github.com/triciamedina/belly-app).
 
@@ -283,7 +283,7 @@ Status: 201 Created
 
 {
     "id": 11,
-    "ownder": 1,
+    "owner": 1,
     "created_at": "2020-02-07T13:23:12.378Z",
     "bill_name": "Shake Shack", 
     "bill_thumbnail": "🍔", 
@@ -309,7 +309,7 @@ Status: 200 OK
 
 {
     "id": 11,
-    "ownder": 1,
+    "owner": 1,
     "created_at": "2020-02-07T13:23:12.378Z",
     "bill_name": "Shake Shack", 
     "bill_thumbnail": "🍔", 
@@ -335,7 +335,7 @@ Status: 200 OK
 
 {
     "id": 11,
-    "ownder": 1,
+    "owner": 1,
     "created_at": "2020-02-07T13:23:12.378Z",
     "bill_name": "Shake Shack", 
     "bill_thumbnail": "🍔", 
@@ -343,6 +343,176 @@ Status: 200 OK
     "tax": 1.50, 
     "tip": 3,
     "fees": 0
+}
+```
+
+## Update a bill owned by a user
+
+Requires user authentication.
+
+### Request
+
+`PATCH /api/bill/owned/:bill_id`
+
+### Parameters
+
+```
+{
+    "billName": "Shake Shack", 
+    "billThumbnail": "🍔", 
+    "discounts": 0, 
+    "tax": 1.50, 
+    "tip": 3,
+    "fees": 0,
+    "deleted": null
+}
+```
+
+### Response
+
+```
+Status: 200 OK
+
+{
+    "id": 11,
+    "owner": 1,
+    "created_at": "2020-02-07T13:23:12.378Z",
+    "bill_name": "Shake Shack", 
+    "bill_thumbnail": "🍔", 
+    "discounts": 0, 
+    "tax": 1.50, 
+    "tip": 3,
+    "fees": 0
+}
+```
+
+## Update a bill shared by a user
+
+Requires user authentication.
+
+### Request
+
+`PATCH /api/bill/shared/:bill_id`
+
+### Parameters
+
+```
+{
+    "billName": "Shake Shack", 
+    "billThumbnail": "🍔", 
+    "discounts": 0, 
+    "tax": 1.50, 
+    "tip": 3,
+    "fees": 0
+}
+```
+
+### Response
+
+```
+Status: 200 OK
+
+{
+    "id": 11,
+    "owner": 1,
+    "created_at": "2020-02-07T13:23:12.378Z",
+    "bill_name": "Shake Shack", 
+    "bill_thumbnail": "🍔", 
+    "discounts": 0, 
+    "tax": 1.50, 
+    "tip": 3,
+    "fees": 0
+}
+```
+
+## Create a new item for a bill
+
+Requires user authentication.
+
+### Request
+
+`POST /api/item`
+
+### Parameters
+
+```
+{
+    "item_name": "Burger, 
+    "bill_id": 1,
+    "quantity": 3,
+    "price": 12.95
+}
+```
+
+### Response
+
+```
+Status: 201 Created
+
+{
+    "id": 3,
+    "bill_id": 1,
+    "item_name": "Burger,
+    "quantity": 3,
+    "price": 12.95
+    "created_at": "2020-02-07T13:23:12.378Z"
+}
+```
+
+## Fetch item by id
+
+Requires user authentication.
+
+### Request
+
+`GET /api/item/:item_id`
+
+### Response
+
+```
+Status: 200 OK
+
+{
+    "id": 3,
+    "bill_id": 1,
+    "item_name": "Burger,
+    "quantity": 3,
+    "price": 12.95
+    "created_at": "2020-02-07T13:23:12.378Z"
+}
+```
+
+## Update an item
+
+Requires user authentication.
+
+### Request
+
+`PATCH /api/item/:item_id`
+
+### Parameters
+
+```
+{
+    "item_name": "Burger", 
+    "quantity": 1, 
+    "price": 3.99, 
+    "deleted": null
+}
+```
+
+### Response
+
+```
+Status: 200 OK
+
+{
+    "id": 3,
+    "bill_id": 1,
+    "item_name": "Burger,
+    "quantity": 1,
+    "price": 3.99
+    "created_at": "2020-02-07T13:23:12.378Z"
 }
 ```
 
