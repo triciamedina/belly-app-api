@@ -4,6 +4,8 @@ Belly is a real-time bill splitting calculator for collaborating with others on 
 ## Live App
 https://belly-app.now.sh/
 
+## REST API
+
 The REST API for [Belly](https://github.com/triciamedina/belly-app).
 - [Login](#login)
 - [Create a user](#create-user)
