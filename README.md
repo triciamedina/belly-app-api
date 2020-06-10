@@ -1,8 +1,29 @@
 # Belly REST API
 
 The REST API for [Belly](https://github.com/triciamedina/belly-app).
+- [Login](#login)
+- [Create a user](#create-user)
+- [Fetch a user](#fetch-user)
+- [Fetch all bills owned by a user](#fetch-bills-owned)
+- [Fetch all bills shared with a user](#fetch-bills-shared)
+- [Create a new bill for a user](#create-bill-owned)
+- [Add a bill to a user's shared list](#create-bill-shared)
+- [Fetch details for a bill owned by a user](#fetch-bill-owned)
+- [Fetch details for a bill shared with a user](#fetch-bill-shared)
+- [Update a bill owned by a user](#update-bill-owned)
+- [Update a bill shared by a user](#update-bill-shared)
+- [Create a new item for a bill](#create-item)
+- [Fetch item by id](#fetch-item)
+- [Update an item](#update-item)
+- [Create a new splitter](#create-splitter)
+- [Update a splitter](#update-splitter)
+- [Add a splitter to an item](#add-item-splitter)
+- [Update a splitter for an item](#update-item-splitter)
+- [Add a bill view for a user](#add-view)
+- [Getting Started](#getting-started)
+- [Built With](#built-with)
 
-## Login
+## <a id="login"></a> Login
 
 Returns a JWT allowing the user to access routes, services, and resources that are permitted with that token.
 
@@ -29,7 +50,7 @@ Status: 200 OK
 }
 ```
 
-## Create a user
+## <a id="create-user"></a> Create a user
 
 ### Request
 
@@ -58,7 +79,7 @@ Status: 201 Created
 }
 ```
 
-## Fetch a user
+## <a id="fetch-user"></a> Fetch a user
 
 Requires user authentication. Lists public and private profile information when authenticated through JWT auth.
 
@@ -79,7 +100,7 @@ Status: 200 OK
 }
 ```
 
-## Fetch all bills owned by a user
+## <a id="fetch-bills-owned"></a> Fetch all bills owned by a user
 
 Requires user authentication.
 
@@ -149,7 +170,7 @@ Status: 200 OK
 }
 ```
 
-## Fetch all bills shared with a user
+## <a id="fetch-bills-shared"></a> Fetch all bills shared with a user
 
 Requires user authentication.
 
@@ -220,7 +241,7 @@ Status: 200 OK
 }
 ```
 
-## Create a new bill for a user
+## <a id="create-bill-owned"></a> Create a new bill for a user
 
 Requires user authentication.
 
@@ -260,7 +281,7 @@ Status: 201 Created
 }
 ```
 
-## Add a bill to a user's shared list
+## <a id="create-bill-shared"></a> Add a bill to a user's shared list
 
 Requires user authentication.
 
@@ -294,7 +315,7 @@ Status: 201 Created
 }
 ```
 
-## Fetch details for a bill owned by a user
+## <a id="fetch-bill-owned"></a> Fetch details for a bill owned by a user
 
 Requires user authentication.
 
@@ -320,7 +341,7 @@ Status: 200 OK
 }
 ```
 
-## Fetch details for a bill shared with a user
+## <a id="fetch-bill-shared"></a> Fetch details for a bill shared with a user
 
 Requires user authentication.
 
@@ -346,7 +367,7 @@ Status: 200 OK
 }
 ```
 
-## Update a bill owned by a user
+## <a id="update-bill-owned"></a> Update a bill owned by a user
 
 Requires user authentication.
 
@@ -386,7 +407,7 @@ Status: 200 OK
 }
 ```
 
-## Update a bill shared by a user
+## <a id="update-bill-shared"></a> Update a bill shared by a user
 
 Requires user authentication.
 
@@ -425,7 +446,7 @@ Status: 200 OK
 }
 ```
 
-## Create a new item for a bill
+## <a id="create-item"></a> Create a new item for a bill
 
 Requires user authentication.
 
@@ -459,7 +480,7 @@ Status: 201 Created
 }
 ```
 
-## Fetch item by id
+## <a id="fetch-item"></a> Fetch item by id
 
 Requires user authentication.
 
@@ -482,7 +503,7 @@ Status: 200 OK
 }
 ```
 
-## Update an item
+## <a id="update-item"></a> Update an item
 
 Requires user authentication.
 
@@ -509,14 +530,163 @@ Status: 200 OK
 {
     "id": 3,
     "bill_id": 1,
-    "item_name": "Burger,
+    "item_name": "Burger",
     "quantity": 1,
     "price": 3.99
     "created_at": "2020-02-07T13:23:12.378Z"
 }
 ```
 
-## Getting Started
+## <a id="create-splitter"></a> Create a new splitter
+
+Requires user authentication.
+
+### Request
+
+`POST /api/splitter`
+
+### Parameters
+
+```
+{
+    "nickname": "Sam", 
+    "avatar": "#405cf7"
+}
+```
+
+### Response
+
+```
+Status: 201 Created
+
+{
+    "id": 1,
+    "nickname": "Sam", 
+    "avatar": "#405cf7"
+    "created_at": "2020-02-07T13:23:12.378Z"
+}
+```
+
+## <a id="update-splitter"></a> Update a splitter
+
+Requires user authentication.
+
+### Request
+
+`PATCH /api/splitter/:splitter_id`
+
+### Parameters
+
+```
+{
+    "nickname": "Sam", 
+    "avatar": "#405cf7",
+    "deleted": "2020-02-07T13:23:12.378Z"
+}
+```
+
+### Response
+
+```
+Status: 200 OK
+
+{
+    "id": 1,
+    "nickname": "Sam", 
+    "avatar": "#405cf7"
+    "created_at": "2020-02-07T13:23:12.378Z"
+}
+```
+
+## <a id="add-item-splitter"></a> Add a splitter to an item
+
+Requires user authentication.
+
+### Request
+
+`POST /api/splitter/:splitter_id/:item_id`
+
+### Parameters
+
+```
+{
+    "share_qty": 2
+}
+```
+
+### Response
+
+```
+Status: 201 Created
+
+{
+    "splitter_id": 1,
+    "item_id": 2,
+    "share_qty": 2,
+    "created_at": "2020-02-07T13:23:12.378Z"
+}
+```
+
+## <a id="update-item-splitter"></a> Update a splitter for an item
+
+Requires user authentication.
+
+### Request
+
+`PATCH /api/splitter/:splitter_id/:item_id`
+
+### Parameters
+
+```
+{
+    "share_qty": 2,
+    "deleted": "2020-02-07T13:23:12.378Z"
+}
+```
+
+### Response
+
+```
+Status: 200 OK
+
+{
+    "splitter_id": 1,
+    "item_id": 2,
+    "share_qty": 2,
+    "created_at": "2020-02-07T13:23:12.378Z"
+}
+```
+
+## <a id="add-view"></a> Add a bill view for a user
+
+Requires user authentication.
+
+### Request
+
+`POST /api/view`
+
+### Parameters
+
+```
+{
+    "bill_id": 2
+}
+```
+
+### Response
+
+```
+Status: 201 Created
+
+{
+    "id": 1,
+    "bill_id": 2,
+    "user_id": 1,
+    "last_viewed": "2020-02-07T13:23:12.378Z"
+}
+```
+
+## <a id="getting-started"></a> Getting Started
 
 ### Setting up
 
@@ -574,7 +744,7 @@ Run tests with Mocha, Chai, and SuperTest.
 npm run test
 ```
 
-## Built With
+## <a id="built-with"></a> Built With
 - [ws: a Node.js WebSocket library](https://github.com/websockets/ws)
 - [Node](https://nodejs.org/en/docs/)
 - [Express](https://expressjs.com/)
