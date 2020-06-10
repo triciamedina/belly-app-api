@@ -1,4 +1,8 @@
 # Belly REST API
+Belly is a real-time bill splitting calculator for collaborating with others on complicated food bills.
+
+## Live App
+https://belly-app.now.sh/
 
 The REST API for [Belly](https://github.com/triciamedina/belly-app).
 - [Login](#login)
